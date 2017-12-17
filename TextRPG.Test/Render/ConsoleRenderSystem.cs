@@ -22,6 +22,46 @@ namespace TextRPG.Test
         }
 
         [Test]
+        public void RendersFrame()
+        {
+            Frame line = new Frame(new Vector2(4, 4), new Vector2(5, 5));
+            Renderer9x9.Render(line);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, line.Character, @"
+                ---------
+                ---------
+                --xxxxx--
+                --x---x--
+                --x---x--
+                --x---x--
+                --xxxxx--
+                ---------
+                ---------");
+        }
+
+        [TestCase(0.5f, 0.5f)]
+        [TestCase(0.5f, 0.0f)]
+        [TestCase(0.5f, 1.0f)]
+        [Test]
+        public void Renders5x1Rectangle(float pivotX, float pivotY)
+        {
+            Frame line = new Frame(new Vector2(4, 4), new Vector2(5, 1));
+            line.Pivot = new Vector2f(pivotX, pivotY);
+            Renderer9x9.Render(line);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, line.Character, @"
+                ---------
+                ---------
+                ---------
+                ---------
+                --xxxxx--
+                ---------
+                ---------
+                ---------
+                ---------");
+        }
+
+        [Test]
         public void Renders1x1Rectangle()
         {
             Rectangle rectangle = new Rectangle(new Vector2(4, 4), new Vector2(1, 1));
@@ -37,6 +77,26 @@ namespace TextRPG.Test
                 ---------
                 ---------
                 ---------");
+        }
+
+        [Test]
+        public void Renders5x5RectangleWithCenterPivot()
+        {
+            Rectangle rectangle = new Rectangle(new Vector2(4, 4), new Vector2(5, 5));
+            rectangle.Pivot = new Vector2f(0.5f, 0.5f);
+            Renderer9x9.Render(rectangle);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, rectangle.Character, @"
+                ---------
+                ---------
+                --xxxxx--
+                --xxxxx--
+                --xxxxx--
+                --xxxxx--
+                --xxxxx--
+                ---------
+                ---------");
+
         }
 
         [Test]

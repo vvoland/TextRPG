@@ -28,6 +28,26 @@ namespace TextRPG.Render
             throw new NotImplementedException();
         }
 
+        public override void Render(Frame frame)
+        {
+            char c = frame.Character;
+            int startX, startY, endX, endY;
+            CalculateBounds(frame, frame.Size,
+                out startX, out endX,
+                out startY, out endY);
+
+            for(int x = startX; x < endX; x++)
+            {
+                SetPixel(x, startY, c);
+                SetPixel(x, endY - 1, c);
+            }
+            for(int y = startY; y < endY; y++)
+            {
+                SetPixel(startX, y, c);
+                SetPixel(endX - 1, y, c);
+            }
+        }
+
         public override void Render(Rectangle rectangle)
         {
             int startX, startY, endX, endY;
@@ -87,7 +107,7 @@ namespace TextRPG.Render
 
         private bool IsValidPixel(int x, int y)
         {
-            return x > 0 && y > 0 && x < Width && y < Height;
+            return x >= 0 && y >= 0 && x < Width && y < Height;
         }
 
         private bool IsInClippingRange(int x, int y)
@@ -131,5 +151,6 @@ namespace TextRPG.Render
             endX = startX + size.X;
             endY = startY + size.Y;
         }
+
     }
 }

@@ -40,6 +40,7 @@ namespace TextRPG.Render
 
         public abstract void Render(IRenderable renderable);
         public abstract void Render(Rectangle rect);
+        public abstract void Render(Frame frame);
         public abstract void Flush();
     }
 
