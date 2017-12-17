@@ -135,6 +135,66 @@ namespace TextRPG.Test
                 ---------");
         }
 
+        [Test]
+        public void Renders3x3RectangleClippedByRendererBounds()
+        {
+            Rectangle rectangle = new Rectangle(new Vector2(8, 3), new Vector2(3, 3));
+            rectangle.Pivot = new Vector2f(0, 0);
+            Renderer9x9.Render(rectangle);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, rectangle.Character, @"
+                ---------
+                ---------
+                ---------
+                --------x
+                --------x
+                --------x
+                ---------
+                ---------
+                ---------");
+        }
+
+        [Test]
+        public void Renders3x3RectangleClippedTo2x2ByClippingBounds()
+        {
+            Rectangle rectangle = new Rectangle(new Vector2(1, 1), new Vector2(4, 4));
+            rectangle.Pivot = new Vector2f(0, 0);
+            Renderer9x9.SetClipping(new Vector2(3, 3));
+            Renderer9x9.Render(rectangle);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, rectangle.Character, @"
+                ---------
+                -xx------
+                -xx------
+                ---------
+                ---------
+                ---------
+                ---------
+                ---------
+                ---------");
+        }
+
+        [Test]
+        public void RendersTranslated3x3RectangleClippedTo2x2ByClippingBounds()
+        {
+            Rectangle rectangle = new Rectangle(new Vector2(1, 1), new Vector2(4, 4));
+            rectangle.Pivot = new Vector2f(0, 0);
+            Renderer9x9.Translate(new Vector2(2, 2));
+            Renderer9x9.SetClipping(new Vector2(3, 3));
+            Renderer9x9.Render(rectangle);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, rectangle.Character, @"
+                ---------
+                ---------
+                ---------
+                ---xx----
+                ---xx----
+                ---------
+                ---------
+                ---------
+                ---------");
+        }
+
         //        x  y  pivot x, y, w  h  sx  ex  sy  ey
         [TestCase(4, 4, 0.5f, 0.5f, 3, 3,  3,  6,  3, 6)] // center
         [TestCase(4, 4, 0.5f, 0.5f, 1, 1,  4,  5,  4, 5)] // center

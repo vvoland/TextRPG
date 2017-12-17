@@ -72,9 +72,40 @@ namespace TextRPG.Render
 
         private void SetPixel(int x, int y, char value)
         {
+            if (!IsInClippingRange(x, y))
+                return;
+                
+            x += Context.Translation.X;
+            y += Context.Translation.Y;
+            if(!IsValidPixel(x, y))
+                return;
+                
             int idx = GetBufferIndex(x, y);
             Buffer[idx] = value;
             Dirty.Add(new Vector2(x, y));
+        }
+
+        private bool IsValidPixel(int x, int y)
+        {
+            return x > 0 && y > 0 && x < Width && y < Height;
+        }
+
+        private bool IsInClippingRange(int x, int y)
+        {
+            int maxX = Width;
+            int maxY = Height;
+
+            if(Context.Clipping.X != 0)
+            {
+                if(x >= Context.Clipping.X)
+                    return false;
+            }
+            if(Context.Clipping.Y != 0)
+            {
+                if(y >= Context.Clipping.Y)
+                    return false;
+            }
+            return true;
         }
 
         // start is inclusive
