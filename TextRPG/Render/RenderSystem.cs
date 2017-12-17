@@ -7,6 +7,10 @@ namespace TextRPG.Render
         protected Stack<RenderSystemContext> Contexts = new Stack<RenderSystemContext>();
         protected RenderSystemContext Context = new RenderSystemContext();
 
+        public RenderSystem()
+        {
+        }
+
         public virtual void PopContext()
         {
             if(Contexts.Count == 0)
@@ -21,7 +25,12 @@ namespace TextRPG.Render
 
         public virtual void SetClipping(Vector2 size)
         {
-            Context.Viewport = size;
+            Context.Clipping = size;
+        }
+
+        public virtual void DisableClipping()
+        {
+            Context.Clipping = new Vector2(0, 0);
         }
 
         public virtual void Translate(Vector2 translation)
