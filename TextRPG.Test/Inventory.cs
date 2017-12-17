@@ -9,7 +9,7 @@ namespace TextRPG
         IInventory EmptyInventory, OneItemInventory, TwoUniqueItemsInventory, TwoNonUniqueItemsInventory;
         Item TestItem, TestItem2;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Setup()
         {
             EmptyInventory = new InventoryType();
