@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 
-namespace TextRPG.Test
+namespace TextRPG.Game.Test
 {
     [TestFixture(typeof(Item), false, false, true)]
     [TestFixture(typeof(ItemWeapon), true, false, true)]

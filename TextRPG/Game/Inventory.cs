@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TextRPG
+namespace TextRPG.Game
 {
     public class Inventory : IInventory
     {

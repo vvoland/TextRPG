@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using TextRPG.Render;
+using TextRPG.Utils;
 
 namespace TextRPG
 {
@@ -6,15 +9,19 @@ namespace TextRPG
     {
         static void Main(string[] args)
         {
-            Console.BackgroundColor = ConsoleColor.Gray;
-            Console.Clear();
+            SystemConsole console = new SystemConsole();
+            int width = console.WindowWidth;
+            int height = console.WindowHeight;
 
-            int w = Console.WindowWidth;
-            int h = Console.WindowHeight;
+            ConsoleRenderSystem renderer = new ConsoleRenderSystem(console, width, height);
+            Frame rect = new Frame(new Vector2(width/2, height/2), new Vector2(30, 30));
+            rect.Pivot = new Vector2f(0.5f, 0.5f);
+            console.BackgroundColor = ConsoleColor.Cyan;
+            console.ForegroundColor = ConsoleColor.Red;
+            console.Clear();
 
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.SetCursorPosition(w / 2 - 10, h / 2);
-            Console.Write("This is my RPG game!");
+            renderer.Render(rect);
+            renderer.Flush();
 
             Console.ReadLine();
         }

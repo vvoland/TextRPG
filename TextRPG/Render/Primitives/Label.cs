@@ -6,7 +6,7 @@ namespace TextRPG.Render
     {
         public Vector2 Position { get; set; }
         public Vector2f Pivot { get; set; }
-        public ConsoleColor Color { get; set; }
+        public Color Color { get; set; }
         public string Text { get; set; }
         public Vector2 Size
         {
@@ -36,7 +36,7 @@ namespace TextRPG.Render
         {
         }
 
-        public Label(string text, Vector2 position, Vector2f pivot, ConsoleColor color = ConsoleColor.White)
+        public Label(string text, Vector2 position, Vector2f pivot, Color color = Color.White)
         {
             Text = text;
             Position = position;

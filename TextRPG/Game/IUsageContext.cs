@@ -1,4 +1,4 @@
-namespace TextRPG
+namespace TextRPG.Game
 {
     public interface IUsageContext
     {

@@ -25,7 +25,7 @@ namespace TextRPG.Render
 
         public override void Render(IRenderable renderable)
         {
-            throw new NotImplementedException();
+            renderable.Render(this);
         }
 
         public override void Render(Frame frame)

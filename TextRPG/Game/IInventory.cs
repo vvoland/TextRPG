@@ -1,6 +1,6 @@
 using System;
 
-namespace TextRPG
+namespace TextRPG.Game
 {
     public interface IInventory
     {

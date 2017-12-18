@@ -1,7 +1,7 @@
 using NSubstitute;
 using NUnit.Framework;
 
-namespace TextRPG
+namespace TextRPG.Game.Test
 {
     [TestFixture(typeof(Inventory))]
     public class InventoryTest<InventoryType> where InventoryType : IInventory, new()
