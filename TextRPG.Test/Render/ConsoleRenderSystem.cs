@@ -39,6 +39,24 @@ namespace TextRPG.Test
                 ---------");
         }
 
+        [Test]
+        public void RendersLabel()
+        {
+            Label line = new Label("Test", new Vector2(4, 4));
+            Renderer9x9.Render(line);
+            Renderer9x9.Flush();
+            CheckBuffer(Console9x9, Char.MinValue, @"
+                ---------
+                ---------
+                ---------
+                ---------
+                --Test---
+                ---------
+                ---------
+                ---------
+                ---------");
+        }
+
         [TestCase(0.5f, 0.5f)]
         [TestCase(0.5f, 0.0f)]
         [TestCase(0.5f, 1.0f)]

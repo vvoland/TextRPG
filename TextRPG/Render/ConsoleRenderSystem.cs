@@ -64,6 +64,25 @@ namespace TextRPG.Render
             }
         }
 
+        // TODO: add multiple line support
+        public override void Render(Label label)
+        {
+            int startX, startY, endX, endY;
+            Vector2 size = label.Size;
+            CalculateBounds(label, size,
+                out startX, out endX,
+                out startY, out endY);
+
+            int i = 0;
+            for(int y = startY; y < endY; y++)
+            {
+                for(int x = startX; x < endX; x++)
+                {
+                    SetPixel(x, y, label.Text[i++]);
+                }
+            }
+        }
+
         public override void Flush()
         {
             if(AllDirty)
@@ -83,6 +102,30 @@ namespace TextRPG.Render
                     Console.Write(Buffer[GetBufferIndex(d.X, d.Y)]);
                 });
             }
+        }
+
+        // start is inclusive
+        // end is exclusive
+        public void CalculateBounds(
+            IRenderable renderable, Vector2 size,
+            out int startX, out int endX,
+            out int startY, out int endY)
+        {
+            var pos = renderable.Position;
+            var pivot = renderable.Pivot;
+
+            int dx = (int)(size.X * pivot.X);
+            int dy = (int)(size.Y * pivot.Y);
+
+            if(dx == size.X)
+                dx -= 1;
+            if(dy == size.Y)
+                dy -= 1;
+
+            startX = pos.X - dx;
+            startY = pos.Y - dy;
+            endX = startX + size.X;
+            endY = startY + size.Y;
         }
 
         private int GetBufferIndex(int x, int y)
@@ -126,30 +169,6 @@ namespace TextRPG.Render
                     return false;
             }
             return true;
-        }
-
-        // start is inclusive
-        // end is exclusive
-        public void CalculateBounds(
-            IRenderable renderable, Vector2 size,
-            out int startX, out int endX,
-            out int startY, out int endY)
-        {
-            var pos = renderable.Position;
-            var pivot = renderable.Pivot;
-
-            int dx = (int)(size.X * pivot.X);
-            int dy = (int)(size.Y * pivot.Y);
-
-            if(dx == size.X)
-                dx -= 1;
-            if(dy == size.Y)
-                dy -= 1;
-
-            startX = pos.X - dx;
-            startY = pos.Y - dy;
-            endX = startX + size.X;
-            endY = startY + size.Y;
         }
 
     }
