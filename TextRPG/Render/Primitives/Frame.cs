@@ -1,6 +1,6 @@
 namespace TextRPG.Render
 {
-    public class Frame : IRenderable
+    public class Frame : IRenderable, ISizeable
     {
         public char Character { get; set; }
         public Vector2 Position { get; set; }

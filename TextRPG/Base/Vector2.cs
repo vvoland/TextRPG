@@ -34,6 +34,13 @@ namespace TextRPG
             };
         }
 
+        public Vector2 Expand(int x, int y)
+        {
+            X += x;
+            Y += y;
+            return this;
+        }
+
         public static Vector2 operator-(Vector2 a, Vector2 b)
         {
             return new Vector2
