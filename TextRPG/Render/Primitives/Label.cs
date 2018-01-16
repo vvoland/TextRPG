@@ -2,7 +2,7 @@ using System;
 
 namespace TextRPG.Render
 {
-    public class Label : IRenderable
+    public class Label : IRenderable, IColorable
     {
         public Vector2 Position { get; set; }
         public Vector2f Pivot { get; set; }
@@ -38,6 +38,7 @@ namespace TextRPG.Render
 
         public Label(string text, Vector2 position, Vector2f pivot, Color color = Color.White)
         {
+            Color = Color.White;
             Text = text;
             Position = position;
             Pivot = pivot;

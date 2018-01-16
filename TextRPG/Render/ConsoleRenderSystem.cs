@@ -9,6 +9,7 @@ namespace TextRPG.Render
     public class ConsoleRenderSystem : RenderSystem
     {
         private char[] Buffer;
+        private ConsoleColor[] ColorBuffer;
         private List<Vector2> Dirty = new List<Vector2>();
         private int Width, Height;
         private IConsole Console;
@@ -20,6 +21,7 @@ namespace TextRPG.Render
             Width = width;
             Height = height;
             Buffer = Enumerable.Repeat(' ', width * height).ToArray();
+            ColorBuffer = Enumerable.Repeat(ConsoleColor.White, width * height).ToArray();
             Dirty.Capacity = Width * Height;
         }
 
@@ -35,16 +37,17 @@ namespace TextRPG.Render
             CalculateBounds(frame, frame.Size,
                 out startX, out endX,
                 out startY, out endY);
+            ConsoleColor color = GetColor(frame);
 
             for(int x = startX; x < endX; x++)
             {
-                SetPixel(x, startY, c);
-                SetPixel(x, endY - 1, c);
+                SetPixel(x, startY, c, color);
+                SetPixel(x, endY - 1, c, color);
             }
             for(int y = startY; y < endY; y++)
             {
-                SetPixel(startX, y, c);
-                SetPixel(endX - 1, y, c);
+                SetPixel(startX, y, c, color);
+                SetPixel(endX - 1, y, c, color);
             }
         }
 
@@ -54,12 +57,13 @@ namespace TextRPG.Render
             CalculateBounds(rectangle, rectangle.Size,
                 out startX, out endX,
                 out startY, out endY);
+            ConsoleColor color = GetColor(rectangle);
 
             for(int y = startY; y < endY; y++)
             {
                 for(int x = startX; x < endX; x++)
                 {
-                    SetPixel(x, y, rectangle.Character);
+                    SetPixel(x, y, rectangle.Character, color);
                 }
             }
         }
@@ -72,15 +76,27 @@ namespace TextRPG.Render
             CalculateBounds(label, size,
                 out startX, out endX,
                 out startY, out endY);
+            ConsoleColor color = GetColor(label);
 
             int i = 0;
             for(int y = startY; y < endY; y++)
             {
                 for(int x = startX; x < endX; x++)
                 {
-                    SetPixel(x, y, label.Text[i++]);
+                    SetPixel(x, y, label.Text[i++], color);
                 }
             }
+        }
+
+        private ConsoleColor GetColor(IRenderable renderable)
+        {
+            IColorable colorable = renderable as IColorable;
+            Color color = Color.White;
+            if(colorable != null)
+            {
+                color = colorable.Color;
+            }
+            return color.ToConsoleColor();
         }
 
         public override void Flush()
@@ -90,18 +106,24 @@ namespace TextRPG.Render
                 for(int x = 0; x < Width; x++)
                 for(int y = 0; y < Height; y++)
                 {
-                    Console.SetCursorPosition(x, y);
-                    Console.Write(Buffer[GetBufferIndex(x, y)]);
+                    FlushPixel(x, y);
                 }
             }
             else
             {
                 Dirty.ForEach(d => 
                 {
-                    Console.SetCursorPosition(d.X, d.Y);
-                    Console.Write(Buffer[GetBufferIndex(d.X, d.Y)]);
+                    FlushPixel(d.X, d.Y);
                 });
             }
+        }
+
+        private void FlushPixel(int x, int y)
+        {
+            int index = GetBufferIndex(x, y);
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = ColorBuffer[index];
+            Console.Write(Buffer[index]);
         }
 
         // start is inclusive
@@ -133,7 +155,7 @@ namespace TextRPG.Render
             return y * Width + x;
         }
 
-        private void SetPixel(int x, int y, char value)
+        private void SetPixel(int x, int y, char value, ConsoleColor color)
         {
             if (!IsInClippingRange(x, y))
                 return;
@@ -145,6 +167,7 @@ namespace TextRPG.Render
                 
             int idx = GetBufferIndex(x, y);
             Buffer[idx] = value;
+            ColorBuffer[idx] = color;
             Dirty.Add(new Vector2(x, y));
         }
 

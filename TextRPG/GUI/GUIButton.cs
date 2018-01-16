@@ -8,6 +8,8 @@ namespace TextRPG.GUI
         public override Vector2 Position { get; set; }
         public override Vector2f Pivot { get; set; }
         public Vector2 Size { get; set; }
+        public Color SelectionColor = Color.DarkGreen;
+        public Color SelectionFrameColor = Color.Red;
 
         private Frame Background;
         private Label Label;
@@ -18,8 +20,10 @@ namespace TextRPG.GUI
             : this(position, null, null, onActivate)
         {
             Label = new Label(text);
+            Label.Color = Color.Yellow;
             Size = Label.CalculateSize().Expand(4, 2);
             Background = new Frame(Vector2.Zero, Size);
+            Background.Color = Color.Red;
             Background.Character = '*';
         }
 
