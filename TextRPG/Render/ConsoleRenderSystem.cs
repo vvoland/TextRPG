@@ -68,24 +68,42 @@ namespace TextRPG.Render
             }
         }
 
-        // TODO: add multiple line support
         public override void Render(Label label)
         {
             int startX, startY, endX, endY;
+            var lines = label.RenderLines;
+            int maxLineSize = lines
+                .Select(s => s.Count())
+                .Max();
+
             Vector2 size = label.Size;
+            size.X = Math.Min(maxLineSize, size.X);
+            size.Y = Math.Min(lines.Count, size.Y);
+            Vector2 lineSize = new Vector2(size.X, 1);
             CalculateBounds(label, size,
                 out startX, out endX,
                 out startY, out endY);
             ConsoleColor color = GetColor(label);
-
-            int i = 0;
+            
+            int lineI = 0;
+            
             for(int y = startY; y < endY; y++)
             {
+                int unusedY;
+                lineSize.X = lines[lineI].Length;
+                CalculateBounds(new Vector2(label.Position.X, y), label.Pivot, lineSize,
+                    out startX, out endX,
+                    out unusedY, out unusedY
+                );
+                int i = 0;
                 for(int x = startX; x < endX; x++)
                 {
-                    SetPixel(x, y, label.Text[i++], color);
+                    SetPixel(x, y, lines[lineI][i++], color);
                 }
+                lineI++;
             }
+
+
         }
 
         private ConsoleColor GetColor(IRenderable renderable)
@@ -136,6 +154,14 @@ namespace TextRPG.Render
             var pos = renderable.Position;
             var pivot = renderable.Pivot;
 
+            CalculateBounds(pos, pivot, size, out startX, out endX, out startY, out endY);
+        }
+
+        public void CalculateBounds(
+            Vector2 pos, Vector2f pivot, Vector2 size,
+            out int startX, out int endX,
+            out int startY, out int endY)
+        {
             int dx = (int)(size.X * pivot.X);
             int dy = (int)(size.Y * pivot.Y);
 
@@ -147,7 +173,7 @@ namespace TextRPG.Render
             startX = pos.X - dx;
             startY = pos.Y - dy;
             endX = startX + size.X;
-            endY = startY + size.Y;
+            endY = startY + size.Y;   
         }
 
         private int GetBufferIndex(int x, int y)

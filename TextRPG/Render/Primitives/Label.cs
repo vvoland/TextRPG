@@ -1,13 +1,28 @@
 using System;
+using System.Collections.Generic;
+using TextRPG.Utils;
 
 namespace TextRPG.Render
 {
-    public class Label : IRenderable, IColorable
+    public class Label : IRenderable, IColorable, ISizeable
     {
         public Vector2 Position { get; set; }
         public Vector2f Pivot { get; set; }
         public Color Color { get; set; }
-        public string Text { get; set; }
+        public string Text
+        {
+            get
+            {
+                return _Text;
+            }
+
+            set
+            {
+                _Text = value;
+                GenerateRenderText();
+            }
+        }
+
         public Vector2 Size
         {
             get
@@ -20,11 +35,15 @@ namespace TextRPG.Render
             {
                 _Size = value;
                 SizeSet = true;
+                GenerateRenderText();
             }
         }
 
+        public List<string> RenderLines { get; private set; }
+
         private Vector2 _Size;
         private bool SizeSet = false;
+        private string _Text;
 
         public Label(string text)
             : this(text, Vector2.Zero)
@@ -73,6 +92,10 @@ namespace TextRPG.Render
             return new Vector2(maxX, y);
         }
 
+        public void GenerateRenderText()
+        {
+            RenderLines = TextSplit.WidthSplit(Text, Size.X);
+        }
 
         public void Render(RenderSystem system)
         {
