@@ -1,6 +1,6 @@
 namespace TextRPG.Event
 {
-    public class InputKeyEvent
+    public struct InputKeyEvent
     {
         public Key Key { get; set; }
         public KeyModifiers Modifiers { get; set; }
