@@ -1,14 +1,19 @@
 using System;
 using System.Collections.Generic;
 using TextRPG.Event;
+using TextRPG.Render;
+using TextRPG.Utils;
 
 namespace TextRPG.GUI
 {
-    public class GUISystem : IInputEventListener
+    public class GUISystem : IEventListener<InputKeyEvent>, IRenderable
     {
         public ISelectable CurrentSelectable { get; set; }
+
         private List<ISelectable> Selectables = new List<ISelectable>();
         private List<GUIWidget> Widgets = new List<GUIWidget>();
+        public Vector2 Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Vector2f Pivot { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public GUISystem()
         {
@@ -52,6 +57,18 @@ namespace TextRPG.GUI
             Select(Selectables[idx]);
         }
 
+        public void Activate()
+        {
+            if(CurrentSelectable != null)
+            {
+                var activable = CurrentSelectable as IActivable;
+                if(activable != null)
+                {
+                    activable.Activate();
+                }
+            }
+        }
+
         public bool OnEvent(InputKeyEvent keyEvent)
         {
             if(keyEvent.Key == Key.Tab)
@@ -59,8 +76,21 @@ namespace TextRPG.GUI
                 NextSelectable();
                 return true;
             }
+            else if(keyEvent.Key == Key.Enter)
+            {
+                Activate();
+                return true;
+            }
 
             return false;
+        }
+
+        public void Render(RenderSystem system)
+        {
+            Widgets.ForEach(w => 
+            {
+                system.Render(w);
+            });
         }
     }
 }

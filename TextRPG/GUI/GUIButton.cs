@@ -8,8 +8,13 @@ namespace TextRPG.GUI
         public override Vector2 Position { get; set; }
         public override Vector2f Pivot { get; set; }
         public Vector2 Size { get; set; }
-        public Color SelectionColor = Color.DarkGreen;
-        public Color SelectionFrameColor = Color.Red;
+        public Color SelectionColor = Color.DarkYellow;
+        public Color SelectionFrameColor = Color.DarkGreen;
+        public bool Selected
+        {
+            get;
+            protected set;
+        }
 
         private Frame Background;
         private Label Label;
@@ -20,10 +25,10 @@ namespace TextRPG.GUI
             : this(position, null, null, onActivate)
         {
             Label = new Label(text);
-            Label.Color = Color.Yellow;
+            Label.Color = Color.White;
             Size = Label.CalculateSize().Expand(4, 2);
             Background = new Frame(Vector2.Zero, Size);
-            Background.Color = Color.Red;
+            Background.Color = Color.Gray;
             Background.Character = '*';
         }
 
@@ -54,7 +59,19 @@ namespace TextRPG.GUI
 
         public void SetSelected(bool selected)
         {
-            throw new NotImplementedException();
+            if(selected == !Selected)
+            {
+                SwapColor(Background, ref SelectionFrameColor);
+                SwapColor(Label, ref SelectionColor);
+            }
+            Selected = selected;
+        }
+
+        private void SwapColor(IColorable colorable, ref Color color)
+        {
+            var tmp = colorable.Color;
+            colorable.Color = color;
+            color = tmp;
         }
     }
 }
