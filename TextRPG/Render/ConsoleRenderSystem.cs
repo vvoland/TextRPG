@@ -49,6 +49,8 @@ namespace TextRPG.Render
                 SetPixel(startX, y, c, color);
                 SetPixel(endX - 1, y, c, color);
             }
+
+            FinalizeRender(frame);
         }
 
         public override void Render(Rectangle rectangle)
@@ -66,6 +68,7 @@ namespace TextRPG.Render
                     SetPixel(x, y, rectangle.Character, color);
                 }
             }
+            FinalizeRender(rectangle);
         }
 
         public override void Render(Label label)
@@ -103,7 +106,11 @@ namespace TextRPG.Render
                 lineI++;
             }
 
+            FinalizeRender(label);
+        }
 
+        private void FinalizeRender(IRenderable renderable)
+        {
         }
 
         private ConsoleColor GetColor(IRenderable renderable)
@@ -126,6 +133,7 @@ namespace TextRPG.Render
                 {
                     FlushPixel(x, y);
                 }
+                AllDirty = false;
             }
             else
             {
@@ -192,9 +200,12 @@ namespace TextRPG.Render
                 return;
                 
             int idx = GetBufferIndex(x, y);
-            Buffer[idx] = value;
-            ColorBuffer[idx] = color;
-            Dirty.Add(new Vector2(x, y));
+            if(Buffer[idx] != value || ColorBuffer[idx] != color)
+            {
+                Buffer[idx] = value;
+                ColorBuffer[idx] = color;
+                Dirty.Add(new Vector2(x, y));
+            }
         }
 
         private bool IsValidPixel(int x, int y)
