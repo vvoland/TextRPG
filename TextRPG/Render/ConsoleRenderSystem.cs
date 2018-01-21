@@ -139,8 +139,10 @@ namespace TextRPG.Render
             {
                 Dirty.ForEach(d => 
                 {
+                    Logger.Log("Flushing pixel {0} {1}", d.X, d.Y);
                     FlushPixel(d.X, d.Y);
                 });
+                Dirty.Clear();
             }
         }
 
