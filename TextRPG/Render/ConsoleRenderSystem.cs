@@ -22,8 +22,7 @@ namespace TextRPG.Render
             Console = console;
             Width = width;
             Height = height;
-            Buffer = Enumerable.Repeat(ClearCharacter, width * height).ToArray();
-            ColorBuffer = Enumerable.Repeat(ClearColor, width * height).ToArray();
+            Clear();
             Dirty.Capacity = Width * Height;
         }
 
@@ -199,6 +198,12 @@ namespace TextRPG.Render
                     SetPixel(x, y, ClearCharacter, ClearColor);
                 }
             }
+        }
+
+        public override void Clear()
+        {
+            Buffer = Enumerable.Repeat(ClearCharacter, Width * Height).ToArray();
+            ColorBuffer = Enumerable.Repeat(ClearColor, Width * Height).ToArray();
         }
     }
 }

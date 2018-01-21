@@ -44,6 +44,7 @@ namespace TextRPG.Render
         public abstract void Render(Label label);
         public abstract void Flush();
         public abstract void Clear(Rect rect);
+        public abstract void Clear();
     }
 
 }
