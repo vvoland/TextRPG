@@ -310,35 +310,6 @@ namespace TextRPG.Test
                 ---------");
         }
 
-        //        x  y  pivot x, y, w  h  sx  ex  sy  ey
-        [TestCase(4, 4, 0.5f, 0.5f, 3, 3,  3,  6,  3, 6)] // center
-        [TestCase(4, 4, 0.5f, 0.5f, 1, 1,  4,  5,  4, 5)] // center
-        [TestCase(4, 4, 0.0f, 0.0f, 3, 3,  4,  7,  4, 7)] // upper left
-        [TestCase(4, 4, 1.0f, 0.0f, 3, 3,  2,  5,  4, 7)] // upper right
-        [Test]
-        public void CorrectlyCalculatesBounds(
-            int posx, int posy,
-            float pivotx, float pivoty,
-            int sizex, int sizey,
-            int startX, int endX,
-            int startY, int endY)
-        {
-            IRenderable renderable = Substitute.For<IRenderable>();
-            renderable.Position.Returns(new Vector2(posx, posy));
-            renderable.Pivot.Returns(new Vector2f(pivotx, pivoty));
-            Vector2 size = new Vector2(sizex, sizey);
-
-            int _startX, _startY, _endX, _endY;
-            Renderer9x9.CalculateBounds(renderable, size, 
-                out _startX, out _endX,
-                out _startY, out _endY);
-
-            Assert.AreEqual(startX, _startX, "StartX");
-            Assert.AreEqual(endX, _endX, "EndX");
-            Assert.AreEqual(startY, _startY, "StartY");
-            Assert.AreEqual(endY, _endY, "EndY");
-        }
-
         private void CheckBuffer(FakeConsole console, char character, string buffer)
         {
             buffer = SanitizeBuffer(buffer, character);

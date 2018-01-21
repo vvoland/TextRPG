@@ -14,6 +14,7 @@ namespace TextRPG.Render
         private int Width, Height;
         private IConsole Console;
         private bool AllDirty = true;
+        private BoundCalculator Bounds;
 
         public ConsoleRenderSystem(IConsole console, int width, int height)
         {
@@ -22,6 +23,7 @@ namespace TextRPG.Render
             Height = height;
             Buffer = Enumerable.Repeat(' ', width * height).ToArray();
             ColorBuffer = Enumerable.Repeat(ConsoleColor.White, width * height).ToArray();
+            Bounds = new BoundCalculator();
             Dirty.Capacity = Width * Height;
         }
 
@@ -33,21 +35,18 @@ namespace TextRPG.Render
         public override void Render(Frame frame)
         {
             char c = frame.Character;
-            int startX, startY, endX, endY;
-            CalculateBounds(frame, frame.Size,
-                out startX, out endX,
-                out startY, out endY);
+            var bounds = Bounds.Calculate(frame, frame.Size);
             ConsoleColor color = GetColor(frame);
 
-            for(int x = startX; x < endX; x++)
+            for(int x = bounds.XMin; x < bounds.XMax; x++)
             {
-                SetPixel(x, startY, c, color);
-                SetPixel(x, endY - 1, c, color);
+                SetPixel(x, bounds.YMin, c, color);
+                SetPixel(x, bounds.YMax - 1, c, color);
             }
-            for(int y = startY; y < endY; y++)
+            for(int y = bounds.YMin; y < bounds.YMax; y++)
             {
-                SetPixel(startX, y, c, color);
-                SetPixel(endX - 1, y, c, color);
+                SetPixel(bounds.XMin, y, c, color);
+                SetPixel(bounds.XMax - 1, y, c, color);
             }
 
             FinalizeRender(frame);
@@ -55,15 +54,12 @@ namespace TextRPG.Render
 
         public override void Render(Rectangle rectangle)
         {
-            int startX, startY, endX, endY;
-            CalculateBounds(rectangle, rectangle.Size,
-                out startX, out endX,
-                out startY, out endY);
+            var bounds = Bounds.Calculate(rectangle, rectangle.Size);
             ConsoleColor color = GetColor(rectangle);
 
-            for(int y = startY; y < endY; y++)
+            for(int y = bounds.YMin; y < bounds.YMax; y++)
             {
-                for(int x = startX; x < endX; x++)
+                for(int x = bounds.XMin; x < bounds.XMax; x++)
                 {
                     SetPixel(x, y, rectangle.Character, color);
                 }
@@ -73,7 +69,6 @@ namespace TextRPG.Render
 
         public override void Render(Label label)
         {
-            int startX, startY, endX, endY;
             var lines = label.RenderLines;
             int maxLineSize = lines
                 .Select(s => s.Count())
@@ -83,23 +78,17 @@ namespace TextRPG.Render
             size.X = Math.Min(maxLineSize, size.X);
             size.Y = Math.Min(lines.Count, size.Y);
             Vector2 lineSize = new Vector2(size.X, 1);
-            CalculateBounds(label, size,
-                out startX, out endX,
-                out startY, out endY);
+            var bounds = Bounds.Calculate(label, size);
             ConsoleColor color = GetColor(label);
             
             int lineI = 0;
             
-            for(int y = startY; y < endY; y++)
+            for(int y = bounds.YMin; y < bounds.YMax; y++)
             {
-                int unusedY;
                 lineSize.X = lines[lineI].Length;
-                CalculateBounds(new Vector2(label.Position.X, y), label.Pivot, lineSize,
-                    out startX, out endX,
-                    out unusedY, out unusedY
-                );
+                var lineBounds = Bounds.Calculate(new Vector2(label.Position.X, y), label.Pivot, lineSize);
                 int i = 0;
-                for(int x = startX; x < endX; x++)
+                for(int x = lineBounds.XMin; x < lineBounds.XMax; x++)
                 {
                     SetPixel(x, y, lines[lineI][i++], color);
                 }
@@ -152,38 +141,6 @@ namespace TextRPG.Render
             Console.SetCursorPosition(x, y);
             Console.ForegroundColor = ColorBuffer[index];
             Console.Write(Buffer[index]);
-        }
-
-        // start is inclusive
-        // end is exclusive
-        public void CalculateBounds(
-            IRenderable renderable, Vector2 size,
-            out int startX, out int endX,
-            out int startY, out int endY)
-        {
-            var pos = renderable.Position;
-            var pivot = renderable.Pivot;
-
-            CalculateBounds(pos, pivot, size, out startX, out endX, out startY, out endY);
-        }
-
-        public void CalculateBounds(
-            Vector2 pos, Vector2f pivot, Vector2 size,
-            out int startX, out int endX,
-            out int startY, out int endY)
-        {
-            int dx = (int)(size.X * pivot.X);
-            int dy = (int)(size.Y * pivot.Y);
-
-            if(dx == size.X)
-                dx -= 1;
-            if(dy == size.Y)
-                dy -= 1;
-
-            startX = pos.X - dx;
-            startY = pos.Y - dy;
-            endX = startX + size.X;
-            endY = startY + size.Y;   
         }
 
         private int GetBufferIndex(int x, int y)

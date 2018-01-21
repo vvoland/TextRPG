@@ -26,15 +26,17 @@ namespace TextRPG.Game
             int width = Console.WindowWidth;
             int height = Console.WindowHeight;
 
-            GUIButton btn = new GUIButton(new Vector2(width / 4, height / 2), "Test", () => 
+            GUIButton btn = null, btn2 = null;
+            btn = new GUIButton(new Vector2(width / 4, height / 2), "Test", () => 
             {
                 Logger.Log("Button1!");
+                btn.Size = btn.Size.Expand(2, 2);
             });
-            GUIButton btn2 = new GUIButton(new Vector2(width / 4 * 3, height / 2), "Test2", () => 
+            btn2 = new GUIButton(new Vector2(width / 4 * 3, height / 2), "Test2", () => 
             {
                 Logger.Log("Button2!");
+                btn2.Size = btn2.Size.Expand(2, 2);
             });
-
 
             GUISystem = new GUISystem();
             GUISystem.Add(btn);

@@ -7,7 +7,6 @@ namespace TextRPG.GUI
     {
         public override Vector2 Position { get; set; }
         public override Vector2f Pivot { get; set; }
-        public Vector2 Size { get; set; }
         public Color SelectionColor = Color.DarkYellow;
         public Color SelectionFrameColor = Color.DarkGreen;
         public bool Selected
@@ -15,11 +14,24 @@ namespace TextRPG.GUI
             get;
             protected set;
         }
+        public Vector2 Size 
+        { 
+            get
+            {
+                return _Size;
+            }
+            set
+            {
+                _Size = value;
+                if(Background != null)
+                    Background.Size = value;
+            }
+        }
 
         private Frame Background;
         private Label Label;
         private Action ActivateCallback;
-        private Vector2 _Position;
+        private Vector2 _Size, _Position;
 
         public GUIButton(Vector2 position, string text, Action onActivate)
             : this(position, null, null, onActivate)
