@@ -15,14 +15,16 @@ namespace TextRPG.Render
         private IConsole Console;
         private bool AllDirty = true;
         private BoundCalculator Bounds;
+        private const char ClearCharacter = ' ';
+        private const ConsoleColor ClearColor = ConsoleColor.White;
 
         public ConsoleRenderSystem(IConsole console, int width, int height)
         {
             Console = console;
             Width = width;
             Height = height;
-            Buffer = Enumerable.Repeat(' ', width * height).ToArray();
-            ColorBuffer = Enumerable.Repeat(ConsoleColor.White, width * height).ToArray();
+            Buffer = Enumerable.Repeat(ClearCharacter, width * height).ToArray();
+            ColorBuffer = Enumerable.Repeat(ClearColor, width * height).ToArray();
             Bounds = new BoundCalculator();
             Dirty.Capacity = Width * Height;
         }
@@ -190,5 +192,15 @@ namespace TextRPG.Render
             return true;
         }
 
+        public override void Clear(Rect rect)
+        {
+            for(int y = rect.YMin; y < rect.YMax; y++)
+            {
+                for(int x = rect.XMin; x < rect.XMax; x++)
+                {
+                    SetPixel(x, y, ClearCharacter, ClearColor);
+                }
+            }
+        }
     }
 }
