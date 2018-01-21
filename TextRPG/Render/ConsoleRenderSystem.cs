@@ -8,13 +8,12 @@ namespace TextRPG.Render
 {
     public class ConsoleRenderSystem : RenderSystem
     {
-        private char[] Buffer;
-        private ConsoleColor[] ColorBuffer;
-        private List<Vector2> Dirty = new List<Vector2>();
+        private ConsoleRenderBuffer[] Buffers;
+        private int CurrentBuffer = 0;
         private int Width, Height;
         private IConsole Console;
-        private bool AllDirty = true;
         private const char ClearCharacter = ' ';
+        private bool AllDirty = true;
         private const ConsoleColor ClearColor = ConsoleColor.White;
 
         public ConsoleRenderSystem(IConsole console, int width, int height)
@@ -22,8 +21,12 @@ namespace TextRPG.Render
             Console = console;
             Width = width;
             Height = height;
-            Clear();
-            Dirty.Capacity = Width * Height;
+            Buffers = new ConsoleRenderBuffer[]
+            {
+                new ConsoleRenderBuffer(width, height, ClearCharacter, ClearColor),
+                new ConsoleRenderBuffer(width, height, ClearCharacter, ClearColor),
+            };
+            CurrentBuffer = 0;
         }
 
         public override void Render(IRenderable renderable)
@@ -116,35 +119,32 @@ namespace TextRPG.Render
         {
             if(AllDirty)
             {
-                for(int x = 0; x < Width; x++)
-                for(int y = 0; y < Height; y++)
-                {
-                    FlushPixel(x, y);
-                }
+                for(int idx = 0; idx < Width * Height; idx++)
+                    FlushPixel(idx);
                 AllDirty = false;
             }
             else
             {
-                Dirty.ForEach(d => 
-                {
-                    Logger.Log("Flushing pixel {0} {1}", d.X, d.Y);
-                    FlushPixel(d.X, d.Y);
-                });
-                Dirty.Clear();
+                int prevBuffer = 1 - CurrentBuffer;
+                List<int> diff = Buffers[CurrentBuffer].Diff(Buffers[prevBuffer]);
+                diff.ForEach(idx => FlushPixel(idx));
+
+                Buffers[prevBuffer].Clear();
+                CurrentBuffer = prevBuffer;
             }
         }
 
-        private void FlushPixel(int x, int y)
+        private void FlushPixel(int idx)
         {
-            int index = GetBufferIndex(x, y);
-            Console.SetCursorPosition(x, y);
-            Console.ForegroundColor = ColorBuffer[index];
-            Console.Write(Buffer[index]);
-        }
+            int x = idx % Width;
+            int y = idx / Width;
 
-        private int GetBufferIndex(int x, int y)
-        {
-            return y * Width + x;
+            char value = Buffers[CurrentBuffer].Get(x, y);
+            ConsoleColor color = Buffers[CurrentBuffer].GetColor(x, y);
+
+            Console.SetCursorPosition(x, y);
+            Console.ForegroundColor = color;
+            Console.Write(value);
         }
 
         private void SetPixel(int x, int y, char value, ConsoleColor color)
@@ -157,13 +157,7 @@ namespace TextRPG.Render
             if(!IsValidPixel(x, y))
                 return;
                 
-            int idx = GetBufferIndex(x, y);
-            if(Buffer[idx] != value || ColorBuffer[idx] != color)
-            {
-                Buffer[idx] = value;
-                ColorBuffer[idx] = color;
-                Dirty.Add(new Vector2(x, y));
-            }
+            Buffers[CurrentBuffer].Set(x, y, value, color);
         }
 
         private bool IsValidPixel(int x, int y)
@@ -202,8 +196,8 @@ namespace TextRPG.Render
 
         public override void Clear()
         {
-            Buffer = Enumerable.Repeat(ClearCharacter, Width * Height).ToArray();
-            ColorBuffer = Enumerable.Repeat(ClearColor, Width * Height).ToArray();
+            Buffers[CurrentBuffer].Clear();
+            AllDirty = true;
         }
     }
 }
