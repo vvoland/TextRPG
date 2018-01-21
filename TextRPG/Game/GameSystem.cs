@@ -48,6 +48,7 @@ namespace TextRPG.Game
 
         private void InitConsole()
         {
+            System.Console.CursorVisible = false;
             ConsoleOut = System.Console.Out;
             Console = new SystemConsole();
 
