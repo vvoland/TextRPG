@@ -35,7 +35,7 @@ namespace TextRPG.Render
         public override void Render(Frame frame)
         {
             char c = frame.Character;
-            var bounds = BoundCalculator.Calculate(frame, frame.Size);
+            var bounds = BoundsCalculator.Calculate(frame, frame.Size);
             ConsoleColor color = GetColor(frame);
 
             for(int x = bounds.XMin; x < bounds.XMax; x++)
@@ -54,7 +54,7 @@ namespace TextRPG.Render
 
         public override void Render(Rectangle rectangle)
         {
-            var bounds = BoundCalculator.Calculate(rectangle, rectangle.Size);
+            var bounds = BoundsCalculator.Calculate(rectangle, rectangle.Size);
             ConsoleColor color = GetColor(rectangle);
 
             for(int y = bounds.YMin; y < bounds.YMax; y++)
@@ -78,7 +78,7 @@ namespace TextRPG.Render
             size.X = Math.Min(maxLineSize, size.X);
             size.Y = Math.Min(lines.Count, size.Y);
             Vector2 lineSize = new Vector2(size.X, 1);
-            var bounds = BoundCalculator.Calculate(label, size);
+            var bounds = BoundsCalculator.Calculate(label, size);
             ConsoleColor color = GetColor(label);
             
             int lineI = 0;
@@ -86,7 +86,7 @@ namespace TextRPG.Render
             for(int y = bounds.YMin; y < bounds.YMax; y++)
             {
                 lineSize.X = lines[lineI].Length;
-                var lineBounds = BoundCalculator.Calculate(new Vector2(label.Position.X, y), label.Pivot, lineSize);
+                var lineBounds = BoundsCalculator.Calculate(new Vector2(label.Position.X, y), label.Pivot, lineSize);
                 int i = 0;
                 for(int x = lineBounds.XMin; x < lineBounds.XMax; x++)
                 {

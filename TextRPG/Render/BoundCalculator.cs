@@ -2,7 +2,7 @@ using TextRPG;
 
 namespace TextRPG.Render
 {
-    public static class BoundCalculator
+    public static class BoundsCalculator
     {
         public static Rect Calculate(IRenderable renderable, Vector2 size)
         {

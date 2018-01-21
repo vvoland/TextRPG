@@ -23,7 +23,7 @@ namespace TextRPG.Test.Render
             Vector2 pos = new Vector2(posx, posy);
             Vector2f pivot = new Vector2f(pivotx, pivoty);
 
-            Rect rect = BoundCalculator.Calculate(pos, pivot, size);
+            Rect rect = BoundsCalculator.Calculate(pos, pivot, size);
 
             Assert.AreEqual(startX, rect.XMin, "StartX");
             Assert.AreEqual(endX, rect.XMax, "EndX");
