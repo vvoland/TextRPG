@@ -18,15 +18,14 @@ namespace TextRPG.Game
         object KeyEventsLock = false;
         Thread InputThread;
         private TextWriter ConsoleOut;
+        private SystemConsole Console;
 
         public GameSystem()
         {
-            ConsoleOut = Console.Out;
-            SystemConsole console = new SystemConsole();
-            int width = console.WindowWidth;
-            int height = console.WindowHeight;
+            InitConsole();
+            int width = Console.WindowWidth;
+            int height = Console.WindowHeight;
 
-            Renderer = new ConsoleRenderSystem(console, width, height);
             GUIButton btn = new GUIButton(new Vector2(width / 4, height / 2), "Test", () => 
             {
                 Logger.Log("Button1!");
@@ -35,9 +34,7 @@ namespace TextRPG.Game
             {
                 Logger.Log("Button2!");
             });
-            console.BackgroundColor = ConsoleColor.Black;
-            console.ForegroundColor = ConsoleColor.White;
-            console.Clear();
+
 
             GUISystem = new GUISystem();
             GUISystem.Add(btn);
@@ -47,6 +44,17 @@ namespace TextRPG.Game
 
             InputThread = new Thread(HandleInput);
             InputThread.Start();
+        }
+
+        private void InitConsole()
+        {
+            ConsoleOut = System.Console.Out;
+            Console = new SystemConsole();
+
+            Renderer = new ConsoleRenderSystem(Console, Console.WindowWidth, Console.WindowHeight);
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Clear();
         }
 
         private void HandleInput(object obj)
@@ -79,9 +87,9 @@ namespace TextRPG.Game
                     }
                 }
                 Renderer.Render(GUISystem);
-                Console.SetOut(ConsoleOut);
+                System.Console.SetOut(ConsoleOut);
                 Renderer.Flush();
-                Console.SetOut(TextWriter.Null);
+                System.Console.SetOut(TextWriter.Null);
                 Thread.Sleep(5);
             }
         }
