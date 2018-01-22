@@ -4,6 +4,12 @@ namespace TextRPG.Render
 {
     public abstract class RenderSystem
     {
+        public abstract Vector2f Size
+        {
+            get;
+            protected set;
+        }
+
         protected Stack<RenderSystemContext> Contexts = new Stack<RenderSystemContext>();
         protected RenderSystemContext Context = new RenderSystemContext();
 

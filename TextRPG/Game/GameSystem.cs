@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using TextRPG.Event;
+using TextRPG.Game.Views;
 using TextRPG.GUI;
 using TextRPG.Render;
 using TextRPG.Utils;
@@ -11,6 +12,7 @@ namespace TextRPG.Game
 {
     public class GameSystem
     {
+        public bool Running = true;
         ConsoleRenderSystem Renderer;
         GUISystem GUISystem;
 
@@ -19,6 +21,7 @@ namespace TextRPG.Game
         Thread InputThread;
         private TextWriter ConsoleOut;
         private SystemConsole Console;
+        private View CurrentView;
 
         public GameSystem()
         {
@@ -26,26 +29,12 @@ namespace TextRPG.Game
             int width = Console.WindowWidth;
             int height = Console.WindowHeight;
 
-            GUIButton btn = null, btn2 = null;
-            btn = new GUIButton(new Vector2(width / 4, height / 2), "Test", () => 
-            {
-                Logger.Log("Button1!");
-                btn.Size = btn.Size.Expand(2, 2);
-            });
-            btn2 = new GUIButton(new Vector2(width / 4 * 3, height / 2), "Test2", () => 
-            {
-                Logger.Log("Button2!");
-                btn2.Size = btn2.Size.Expand(2, 2);
-            });
-
-            GUISystem = new GUISystem();
-            GUISystem.Add(btn);
-            GUISystem.Add(btn2);
-
             Logger.Log("Starting game!");
 
             InputThread = new Thread(HandleInput);
             InputThread.Start();
+
+            CurrentView = new ViewMainMenu(this, Renderer);
         }
 
         private void InitConsole()
@@ -66,9 +55,9 @@ namespace TextRPG.Game
             InputKeyEvent ev;
 
             Logger.Log("Starting input thread");
-            while(true)
+            while(Running)
             {
-                if(eventSystem.Get(out ev, true))
+                if(eventSystem.Get(out ev, false))
                 {
                     lock(KeyEventsLock)
                     {
@@ -80,21 +69,42 @@ namespace TextRPG.Game
 
         public void Run()
         {
-            while(true)
+            long lastTicks = DateTime.Now.Ticks;
+
+            while(Running)
             {
-                lock(KeyEventsLock)
-                {
-                    while(KeyEvents.Count > 0)
-                    {
-                        GUISystem.OnEvent(KeyEvents.Dequeue());
-                    }
-                }
-                Renderer.Render(GUISystem);
+                ProcessEvents();
+
+                float dt = CalculateDeltaTime(ref lastTicks);
+                CurrentView.Update(dt);
+
                 System.Console.SetOut(ConsoleOut);
                 Renderer.Flush();
                 System.Console.SetOut(TextWriter.Null);
-                Thread.Sleep(5);
+                Thread.Sleep(1);
+            }
+            System.Console.SetOut(ConsoleOut);
+            InputThread.Join();
+        }
+
+        private void ProcessEvents()
+        {
+            lock (KeyEventsLock)
+            {
+                while (KeyEvents.Count > 0)
+                {
+                    CurrentView.OnEvent(KeyEvents.Dequeue());
+                }
             }
         }
+
+        private float CalculateDeltaTime(ref long lastTicks)
+        {
+            long curTicks = DateTime.Now.Ticks;
+            float dt = (curTicks - lastTicks) / 10000.0f;
+            lastTicks = curTicks;
+            return dt;
+        }
+
     }
 }

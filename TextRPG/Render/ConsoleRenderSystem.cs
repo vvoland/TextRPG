@@ -16,11 +16,18 @@ namespace TextRPG.Render
         private bool AllDirty = true;
         private const ConsoleColor ClearColor = ConsoleColor.White;
 
+        public override Vector2f Size 
+        { 
+            get;
+            protected set;
+        }
+
         public ConsoleRenderSystem(IConsole console, int width, int height)
         {
             Console = console;
             Width = width;
             Height = height;
+            Size = new Vector2f((float)width, (float)height);
             Buffers = new ConsoleRenderBuffer[]
             {
                 new ConsoleRenderBuffer(width, height, ClearCharacter, ClearColor),
