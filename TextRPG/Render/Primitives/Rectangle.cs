@@ -1,6 +1,6 @@
 namespace TextRPG.Render
 {
-    public class Rectangle : IRenderable, IColorable
+    public class Rectangle : IRenderable, IColorable, ISizeable
     {
         public char Character { get; set; }
         public Vector2 Position { get; set; }
