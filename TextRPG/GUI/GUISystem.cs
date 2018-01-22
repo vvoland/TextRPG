@@ -6,14 +6,12 @@ using TextRPG.Utils;
 
 namespace TextRPG.GUI
 {
-    public class GUISystem : IEventListener<InputKeyEvent>, IRenderable
+    public class GUISystem : IEventListener<InputKeyEvent>
     {
         public ISelectable CurrentSelectable { get; set; }
 
         private List<ISelectable> Selectables = new List<ISelectable>();
         private List<GUIWidget> Widgets = new List<GUIWidget>();
-        public Vector2 Position { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Vector2f Pivot { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public GUISystem()
         {
@@ -85,12 +83,5 @@ namespace TextRPG.GUI
             return false;
         }
 
-        public void Render(RenderSystem system)
-        {
-            Widgets.ForEach(w => 
-            {
-                system.Render(w);
-            });
-        }
     }
 }
