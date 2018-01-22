@@ -83,6 +83,7 @@ namespace TextRPG.Game
                 System.Console.SetOut(TextWriter.Null);
                 Thread.Sleep(1);
             }
+            System.Console.CursorVisible = true;
             System.Console.SetOut(ConsoleOut);
             InputThread.Join();
         }
