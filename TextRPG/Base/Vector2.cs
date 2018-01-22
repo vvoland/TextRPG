@@ -25,6 +25,32 @@ namespace TextRPG
             return Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
         }
 
+        public static bool operator !=(Vector2 left, Vector2 right)
+		{
+			return !left.Equals(right);
+		}
+
+		public static bool operator ==(Vector2 left, Vector2 right)
+		{
+			return left.Equals(right);
+		}
+
+        public override bool Equals(object obj)
+        {
+            if(!(obj is Vector2))
+            {
+                return false;
+            }
+            var other = (Vector2)obj;
+
+            return X == other.X && Y == other.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return X ^ Y;
+        }
+
         public static Vector2 operator+(Vector2 a, Vector2 b)
         {
             return new Vector2
