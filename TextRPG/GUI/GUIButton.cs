@@ -4,7 +4,7 @@ using TextRPG.Utils;
 
 namespace TextRPG.GUI
 {
-    public class GUIButton : GUIWidget, ISelectable, IActivable, ISizeable
+    public class GUIButton : GUIWidget, ISelectable, IActivable
     {
         public override Vector2 Position { get; set; }
         public override Vector2f Pivot
@@ -24,7 +24,7 @@ namespace TextRPG.GUI
             get;
             protected set;
         }
-        public Vector2 Size 
+        public override Vector2 Size 
         { 
             get => Background.Size;
             set => Background.Size = value;
