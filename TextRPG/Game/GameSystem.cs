@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using TextRPG.Event;
+using TextRPG.Game.Mechanics;
 using TextRPG.Game.Views;
 using TextRPG.GUI;
 using TextRPG.Render;
@@ -21,6 +22,7 @@ namespace TextRPG.Game
         private TextWriter ConsoleOut;
         private SystemConsole Console;
         private View CurrentView, NextView;
+        private PlayerEntity Player;
 
         public GameSystem()
         {
@@ -34,6 +36,19 @@ namespace TextRPG.Game
             InputThread.Start();
 
             SetView(new ViewMainMenu(this, Renderer));
+        }
+
+        public void StartNewGame()
+        {
+            var creator = new CharacterCreator(this, Renderer);
+            creator.Start();
+            creator.OnFinish += OnPlayerCreated;
+        }
+
+        private void OnPlayerCreated(PlayerEntity player)
+        {
+            Player = player;
+            SetView(new ViewGame(this, Renderer));
         }
 
         public void SetView(View view)

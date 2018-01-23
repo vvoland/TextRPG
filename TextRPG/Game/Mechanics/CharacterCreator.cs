@@ -1,4 +1,5 @@
 using System;
+using TextRPG.Event;
 using TextRPG.Game.Views;
 using TextRPG.Render;
 using TextRPG.Utils;
@@ -7,9 +8,14 @@ namespace TextRPG.Game.Mechanics
 {
     public class CharacterCreator
     {
+        public Action<PlayerEntity> OnFinish;
         private ViewNameCharacter NameView;
+        private ViewChooseProfession ProfessionView;
         private GameSystem Game;
         private RenderSystem Renderer;
+
+        private string Name;
+        private Profession Profession;
 
         public CharacterCreator(GameSystem game, RenderSystem renderer)
         {
@@ -26,8 +32,18 @@ namespace TextRPG.Game.Mechanics
 
         private void OnNameChoosen(string name)
         {
-            Logger.Log("Name: {0}", name);
-            Game.SetView(new ViewMainMenu(Game, Renderer));
+            Name = name;
+            NameView = null;
+            ProfessionView = new ViewChooseProfession(Game, Renderer);
+            ProfessionView.OnFinish += OnProfessionChoosen;
+            Game.SetView(ProfessionView);
+        }
+
+        private void OnProfessionChoosen(Profession profession)
+        {
+            Profession = profession;
+            var player = new PlayerEntity(Name, Profession);
+            OnFinish?.Invoke(player);
         }
     }
 }
