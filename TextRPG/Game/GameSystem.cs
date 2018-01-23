@@ -14,13 +14,13 @@ namespace TextRPG.Game
     {
         public bool Running = true;
         ConsoleRenderSystem Renderer;
-        
+
         Queue<InputKeyEvent> KeyEvents = new Queue<InputKeyEvent>();
         object KeyEventsLock = false;
         Thread InputThread;
         private TextWriter ConsoleOut;
         private SystemConsole Console;
-        private View CurrentView;
+        private View CurrentView, NextView;
 
         public GameSystem()
         {
@@ -33,7 +33,12 @@ namespace TextRPG.Game
             InputThread = new Thread(HandleInput);
             InputThread.Start();
 
-            CurrentView = new ViewMainMenu(this, Renderer);
+            SetView(new ViewMainMenu(this, Renderer));
+        }
+
+        public void SetView(View view)
+        {
+            NextView = view;
         }
 
         private void InitConsole()
@@ -72,10 +77,11 @@ namespace TextRPG.Game
 
             while(Running)
             {
+                ChangeViewIfNew();
                 ProcessEvents();
 
                 float dt = CalculateDeltaTime(ref lastTicks);
-                CurrentView.Update(dt);
+                CurrentView?.Update(dt);
 
                 System.Console.SetOut(ConsoleOut);
                 Renderer.Flush();
@@ -87,8 +93,31 @@ namespace TextRPG.Game
             InputThread.Join();
         }
 
+        private bool ChangeViewIfNew()
+        {
+            if(NextView != null)
+            {
+                CurrentView?.Close();
+                CurrentView = NextView;
+                NextView = null;
+                return true;
+            }
+            else if(CurrentView != null)
+            {
+                if(CurrentView.Finished)
+                {
+                    CurrentView = null;
+                }
+            }
+
+            return false;
+        }
+
         private void ProcessEvents()
         {
+            if(CurrentView == null)
+                return;
+                
             lock (KeyEventsLock)
             {
                 while (KeyEvents.Count > 0)

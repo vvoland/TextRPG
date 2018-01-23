@@ -1,5 +1,6 @@
 using System;
 using TextRPG.Event;
+using TextRPG.Game.Mechanics;
 using TextRPG.GUI;
 using TextRPG.GUI.Layout;
 using TextRPG.Render;
@@ -40,7 +41,11 @@ namespace TextRPG.Game.Views
             ButtonsLayout = new LinearLayout(LayoutDirection.Horizontal, GetScreenPoint(0.5f, 0.5f), Vector2f.Center);
             ButtonsLayout.Spacing = 5;
             ContinueGame = new GUIButton(Vector2.Zero, "Continue Game", () => ActionContinueGame());
-            NewGame = new GUIButton(Vector2.Zero, "New Game", () => ActionNewGame());
+            NewGame = new GUIButton(Vector2.Zero, "New Game", () => 
+            {
+                ActionNewGame();
+                System.GC.Collect();
+            });
             Quit = new GUIButton(Vector2.Zero, "Quit", () => Game.Running = false);
 
             ButtonsLayout.Add(ContinueGame);
@@ -65,7 +70,8 @@ namespace TextRPG.Game.Views
 
         private void ActionNewGame()
         {
-            Logger.Log("New game!");
+            var creator = new CharacterCreator(Game, Renderer);
+            creator.Start();
         }
 
         public override void Update(float dt)
