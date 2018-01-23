@@ -41,14 +41,12 @@ namespace TextRPG.Game.Views
             ButtonsLayout = new LinearLayout(LayoutDirection.Horizontal, GetScreenPoint(0.5f, 0.5f), Vector2f.Center);
             ButtonsLayout.Spacing = 5;
             ContinueGame = new GUIButton(Vector2.Zero, "Continue Game", () => ActionContinueGame());
-            NewGame = new GUIButton(Vector2.Zero, "New Game", () => 
-            {
-                ActionNewGame();
-                System.GC.Collect();
-            });
+            NewGame = new GUIButton(Vector2.Zero, "New Game", () => ActionNewGame());
             Quit = new GUIButton(Vector2.Zero, "Quit", () => Game.Running = false);
 
-            ButtonsLayout.Add(ContinueGame);
+            // TODO: Enable when game saving/loading is done
+            // ButtonsLayout.Add(ContinueGame);
+            // GUI.Add(ContinueGame);
             ButtonsLayout.Add(NewGame);
             ButtonsLayout.Add(Quit);
             ButtonsLayout.Size = new Vector2((int)Renderer.Size.X, (int)Renderer.Size.Y / 4);
@@ -58,7 +56,6 @@ namespace TextRPG.Game.Views
             MenuLayout.Add(new GUIAdapter(Help));
             MenuLayout.Add(ButtonsLayout);
 
-            GUI.Add(ContinueGame);
             GUI.Add(NewGame);
             GUI.Add(Quit);
         }
@@ -70,8 +67,7 @@ namespace TextRPG.Game.Views
 
         private void ActionNewGame()
         {
-            var creator = new CharacterCreator(Game, Renderer);
-            creator.Start();
+            Game.StartNewGame();
         }
 
         public override void Update(float dt)
