@@ -13,7 +13,6 @@ namespace TextRPG.Game.Views
         private GUISystem GUI;
         private Label Header;
         private LinearLayout ProfessionsLayout;
-        private GUIButton Continue;
 
         public ViewChooseProfession(GameSystem game, RenderSystem renderer) : base(game, renderer)
         {
@@ -33,8 +32,6 @@ namespace TextRPG.Game.Views
                 ProfessionsLayout.Add(button);
                 GUI.Add(button);
             }
-
-            GUI.Add(Continue);
         }
 
         private void ChooseProfession(Profession profession)
