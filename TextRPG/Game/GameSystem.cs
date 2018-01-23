@@ -14,8 +14,7 @@ namespace TextRPG.Game
     {
         public bool Running = true;
         ConsoleRenderSystem Renderer;
-        GUISystem GUISystem;
-
+        
         Queue<InputKeyEvent> KeyEvents = new Queue<InputKeyEvent>();
         object KeyEventsLock = false;
         Thread InputThread;
