@@ -11,6 +11,7 @@ namespace TextRPG.GUI
         public ISelectable CurrentSelectable { get; set; }
 
         private List<ISelectable> Selectables = new List<ISelectable>();
+        private List<IEventListener<InputKeyEvent>> InputKeyListeners = new List<IEventListener<InputKeyEvent>>();
         private List<GUIWidget> Widgets = new List<GUIWidget>();
 
         public GUISystem()
@@ -21,10 +22,17 @@ namespace TextRPG.GUI
         public void Add(GUIWidget widget)
         {
             ISelectable selectable = widget as ISelectable;
+            IEventListener<InputKeyEvent> keyListener = widget as IEventListener<InputKeyEvent>;
+
             if(selectable != null)
             {
                 AddSelectable(selectable);
             }
+            if(keyListener != null)
+            {
+                InputKeyListeners.Add(keyListener);
+            }
+
             Widgets.Add(widget);
         }
 
@@ -69,19 +77,30 @@ namespace TextRPG.GUI
 
         public bool OnEvent(InputKeyEvent keyEvent)
         {
-            if(keyEvent.Key == Key.Tab)
+            if (keyEvent.Key == Key.Tab)
             {
                 NextSelectable();
                 return true;
             }
-            else if(keyEvent.Key == Key.Enter)
+            else if (keyEvent.Key == Key.Enter)
             {
                 Activate();
                 return true;
             }
+            bool consumed = PropagateEvents(keyEvent);
+
+            return consumed;
+        }
+
+        private bool PropagateEvents(InputKeyEvent keyEvent)
+        {
+            foreach (var listener in InputKeyListeners)
+            {
+                if (listener.OnEvent(keyEvent))
+                    return true;
+            }
 
             return false;
         }
-
     }
 }
