@@ -76,7 +76,7 @@ namespace TextRPG.GUI.Layout
                         max = widget.Size.X;
                     }
                 }
-                width -= Spacing;
+                height -= Spacing;
                 return new Vector2(max, height);
             }
         }
@@ -95,7 +95,7 @@ namespace TextRPG.GUI.Layout
                     widget.Position = new Vector2(cur, Bounds.Center.Y);
                 else
                     widget.Position = new Vector2(Bounds.Center.X, cur);
-                cur += size/2 + Spacing;
+                cur += (size + 1) / 2 + Spacing;
             }
         }
 
