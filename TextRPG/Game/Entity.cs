@@ -2,7 +2,6 @@ namespace TextRPG.Game
 {
     public class Entity : INameable
     {
-        public Vector2 Position { get; set; }
         public string Name { get; set; }
         public string PluralName
         {
