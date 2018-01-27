@@ -5,6 +5,12 @@ namespace TextRPG.Game
         public string Name { get; set; }
         public string PluralName { get; set; }
 
+        public Item(string name, string plural)
+        {
+            Name = name;
+            PluralName = plural;
+        }
+
         public virtual bool CanUse(IUsageContext context)
         {
             return false;
