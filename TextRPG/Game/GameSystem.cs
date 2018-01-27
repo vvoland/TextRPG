@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using TextRPG.Event;
+using TextRPG.Game.Generation;
 using TextRPG.Game.Mechanics;
 using TextRPG.Game.Views;
 using TextRPG.GUI;
@@ -21,8 +22,18 @@ namespace TextRPG.Game
         Thread InputThread;
         private TextWriter ConsoleOut;
         private SystemConsole Console;
-        private View CurrentView, NextView;
+        private Stack<View> Views = new Stack<View>();
         private PlayerEntity Player;
+        private World World;
+        private View CurrentView
+        {
+            get
+            {
+                if(Views.Count == 0)
+                    return null;
+                return Views.Peek();
+            }
+        }
 
         public GameSystem()
         {
@@ -47,13 +58,35 @@ namespace TextRPG.Game
 
         private void OnPlayerCreated(PlayerEntity player)
         {
-            Player = player;
+            CreateNewGame(player);
             SetView(new ViewGame(this, Renderer));
+            PushView(new ViewMessageInfo(this, Renderer, "You wake up", () => {}));
+        }
+
+        private void CreateNewGame(PlayerEntity player)
+        {
+            Player = player;
+            var generator = new WorldGenerator();
+            World = generator.Generate(player);
+
+        }
+
+        public void PushView(View view)
+        {
+            Views.Push(view);
+        }
+
+        public void PopView()
+        {
+            Views.Pop();
+            
         }
 
         public void SetView(View view)
         {
-            NextView = view;
+            foreach(var v in Views)
+                v.Close();
+            PushView(view);
         }
 
         private void InitConsole()
@@ -92,7 +125,6 @@ namespace TextRPG.Game
 
             while(Running)
             {
-                ChangeViewIfNew();
                 ProcessEvents();
 
                 float dt = CalculateDeltaTime(ref lastTicks);
@@ -106,26 +138,6 @@ namespace TextRPG.Game
             System.Console.CursorVisible = true;
             System.Console.SetOut(ConsoleOut);
             InputThread.Join();
-        }
-
-        private bool ChangeViewIfNew()
-        {
-            if(NextView != null)
-            {
-                CurrentView?.Close();
-                CurrentView = NextView;
-                NextView = null;
-                return true;
-            }
-            else if(CurrentView != null)
-            {
-                if(CurrentView.Finished)
-                {
-                    CurrentView = null;
-                }
-            }
-
-            return false;
         }
 
         private void ProcessEvents()

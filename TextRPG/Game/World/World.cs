@@ -4,18 +4,20 @@ namespace TextRPG.Game
 {
     public class World
     {
-        private List<WorldEntity> Entities { get; set; }
+        private List<Entity> Entities { get; set; }
 
-        public void Add(WorldEntity entity)
+        public World()
         {
-            entity.World = this;
+            Entities = new List<Entity>();
+        }
+
+        public void Add(Entity entity)
+        {
             Entities.Add(entity);
         }
 
-        public void Remove(WorldEntity entity)
+        public void Remove(Entity entity)
         {
-            if(entity.World == this)
-                entity.World = null;
             Entities.Remove(entity);
         }
 
