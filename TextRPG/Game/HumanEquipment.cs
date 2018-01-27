@@ -14,6 +14,7 @@ namespace TextRPG.Game
 
         public HumanEquipment(IInventory inventory)
         {
+            Inventory = inventory;
         }
 
         public void Equip(ItemWeapon weapon)
