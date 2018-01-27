@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace TextRPG.Game
 {
-    public class Inventory : IInventory
+    public class Inventory : IInventory, ICollection
     {
         public int Size 
         {
@@ -13,6 +14,14 @@ namespace TextRPG.Game
                 return Items.Count;
             }
         }
+
+        public int Gold { get; set; }
+
+        int ICollection.Count => ((ICollection)Items).Count;
+
+        public bool IsSynchronized => ((ICollection)Items).IsSynchronized;
+
+        public object SyncRoot => ((ICollection)Items).SyncRoot;
 
         private List<Item> Items = new List<Item>();
 
@@ -65,6 +74,16 @@ namespace TextRPG.Game
         public int RemoveAll(Predicate<Item> predicate)
         {
             return Items.RemoveAll(predicate);
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            ((ICollection)Items).CopyTo(array, index);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return ((ICollection)Items).GetEnumerator();
         }
     }
 }

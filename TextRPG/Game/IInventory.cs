@@ -4,6 +4,7 @@ namespace TextRPG.Game
 {
     public interface IInventory
     {
+        int Gold { get; set; }
         int Size { get; }
         void Add(Item item);
         bool Remove(Item item);
