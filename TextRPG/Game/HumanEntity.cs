@@ -6,7 +6,8 @@ namespace TextRPG.Game
     public class HumanEntity : Entity, IDamageable, IDamageDealer
     {
         public BasicStats Stats;
-        public List<Item> Inventory { get; set; }
+        public Inventory Inventory { get; set; }
+        public HumanEquipment Equipment;
 
         private HealthDamageable Damageable;
 
@@ -15,8 +16,9 @@ namespace TextRPG.Game
         public HumanEntity()
         {
             Stats = new BasicStats();
-            Inventory = new List<Item>();
+            Inventory = new Inventory();
             Damageable = new HealthDamageable();
+            Equipment = new HumanEquipment(Inventory);
         }
 
         public void Kill()
