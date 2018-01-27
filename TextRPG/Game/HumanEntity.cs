@@ -17,7 +17,7 @@ namespace TextRPG.Game
         {
             Stats = new BasicStats();
             Inventory = new Inventory();
-            Damageable = new HealthDamageable();
+            Damageable = new HealthDamageable(Stats);
             Equipment = new HumanEquipment(Inventory);
         }
 
