@@ -34,5 +34,10 @@ namespace TextRPG.Game.Mechanics
         {
             return Stats.Visit(visitor);
         }
+
+        public int CalculateHealth()
+        {
+            return Stats.CalculateHealth();
+        }
     }
 }
