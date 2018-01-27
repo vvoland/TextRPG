@@ -1,11 +1,12 @@
 using System;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace TextRPG.Game.Test
 {
     [TestFixture(typeof(Item), false, false, true)]
     [TestFixture(typeof(ItemWeapon), true, false, true)]
-    public class UsageContextGeneralTest<T> where T : Item, new()
+    public class UsageContextGeneralTest<T> where T : Item
     {
         public class TestParams
         {
@@ -61,7 +62,7 @@ namespace TextRPG.Game.Test
         [OneTimeSetUp]
         public void Setup()
         {
-            Item = new T();
+            Item = Activator.CreateInstance(typeof(T), new object[] { "Test", "Tests" }) as T;
             Context = new TestUsageContext(Params);
         }
 

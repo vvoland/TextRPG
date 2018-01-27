@@ -17,14 +17,10 @@ namespace TextRPG.Game.Test
             TwoUniqueItemsInventory = new InventoryType();
             TwoNonUniqueItemsInventory = new InventoryType();
 
-            TestItem = Substitute.For<Item>();
-            TestItem.Name = "Test Item";
-            TestItem.PluralName = "Test Items";
+            TestItem = Substitute.For<Item>(new object[] { "Test Item", "TestItems"});
             TestItem.CanUse(Arg.Any<IUsageContext>()).ReturnsForAnyArgs(false);
 
-            TestItem2 = Substitute.For<Item>();
-            TestItem2.Name = "Test2 Item";
-            TestItem2.PluralName = "Test2 Items";
+            TestItem2 = Substitute.For<Item>(new object[] { "Test2 Item", "Test2 Items"});
             TestItem2.CanUse(Arg.Any<IUsageContext>()).ReturnsForAnyArgs(false);
 
             OneItemInventory.Add(TestItem);
