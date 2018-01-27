@@ -1,3 +1,5 @@
+using System;
+
 namespace TextRPG.Game
 {
     public class BasicStats : IStats
@@ -13,9 +15,19 @@ namespace TextRPG.Game
             Level = Strength = Agility = Intelligence = Charisma = 1;
         }
 
+        public BasicStats Clone()
+        {
+            return (BasicStats)MemberwiseClone();
+        }
+
         public virtual StatsVisitorResult Visit(IStatsVisitor visitor)
         {
             return visitor.Visit(this);
+        }
+
+        public int CalculateHealth()
+        {
+            return Level * Strength;
         }
     }
 }
