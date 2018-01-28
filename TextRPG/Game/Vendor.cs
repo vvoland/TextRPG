@@ -109,6 +109,7 @@ namespace TextRPG.Game
                 text = "Hello again {0}! Do you want to make a deal?";
             else
                 text = "Hello stranger. My name is {1}. Have a look at my wares!";
+            AlreadyMet = true;
 
             text = string.Format(text, game.Player.Name, Name);
             var view = new ViewTrade(game, game.Renderer, text, this);
