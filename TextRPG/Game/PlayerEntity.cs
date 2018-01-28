@@ -13,6 +13,7 @@ namespace TextRPG.Game
         {
             Name = name;
             Profession = profession;
+            Stats = Profession.BaseStats.Clone();
             Inventory.Gold = 100;
         }
     }
