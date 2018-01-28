@@ -1,23 +1,55 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using TextRPG.Game.Views;
+using TextRPG.GUI;
+using System;
 
 namespace TextRPG.Game
 {
-    public class Vendor
+    public class Vendor : IInteractable, INameable
     {
-        public ICollection Products
+        public IEnumerable<Item> Products
         {
             get
             {
-                return Inventory;
+                return UnlimitedItems
+                    .Concat(Inventory);
             }
         }
+
+        public IEnumerable<Tuple<Item, int>> GroupedProducts
+        {
+            get
+            {
+                var items = Inventory
+                    .GroupBy(i => i.Name)
+                    .Select(g => new Tuple<Item, int>(g.First(), g.Count()));
+                return UnlimitedItems
+                    .Select(i => new Tuple<Item, int>(i, -1))
+                    .Concat(items);
+            }
+        }
+
+        public bool AlreadyMet
+        {
+            get;
+            private set;
+        }
+
+        public string MenuText => "Visit vendor " + Name;
+
+        public string Name { get; set; }
+        public string PluralName { get; set; }
 
         private Inventory Inventory = new Inventory();
         private HashSet<Item> UnlimitedItems = new HashSet<Item>();
 
-        public Vendor()
+        public Vendor(string name)
         {
+            AlreadyMet = false;
+            Name = name;
         }
 
         public Vendor Add(Item item, int count = 1)
@@ -69,5 +101,18 @@ namespace TextRPG.Game
             return true;
         }
 
+        public void Interact(GameSystem game)
+        {
+            string text;
+
+            if(AlreadyMet)
+                text = "Hello again {0}! Do you want to make a deal?";
+            else
+                text = "Hello stranger. My name is {1}. Have a look at my wares!";
+
+            text = string.Format(text, game.Player.Name, Name);
+            var view = new ViewTrade(game, game.Renderer, text, this);
+            game.PushView(view);
+        }
     }
 }
