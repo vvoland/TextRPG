@@ -38,7 +38,7 @@ namespace TextRPG.Game
             private set;
         }
 
-        public string MenuText => "Visit vendor " + Name;
+        public string MenuText => "Visit merchant " + Name;
 
         public string Name { get; set; }
         public string PluralName { get; set; }
