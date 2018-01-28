@@ -110,6 +110,7 @@ namespace TextRPG.Game.Generation
         {
             foreach(var city in Cities)
             {
+                city.Add(new Mayor());
                 int vendors = Random.Next(Description.CitiesMaxVendors);
                 for(int i = 0; i < vendors; i++)
                     city.Add(CreateCityVendor());
