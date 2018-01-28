@@ -4,6 +4,10 @@ namespace TextRPG.Game
 {
     public class World
     {
+        public List<Item> Items;
+        public List<City> Cities;
+        public List<CreatureEntity> Creatures;
+
         private List<Entity> Entities { get; set; }
         private List<Location> Locations { get; set; }
 

@@ -1,0 +1,13 @@
+{
+    "cities.count": 16,
+    "cities.names": [
+        "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L"
+    ],
+    "cities.max_links": 3,
+    "cities.max_vendors": 2,
+
+    "people.names": [
+        "Bogdan", "Stanisław", "Józef", "Maciek"
+    ]
+
+}

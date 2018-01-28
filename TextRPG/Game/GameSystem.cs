@@ -15,7 +15,16 @@ namespace TextRPG.Game
     public class GameSystem
     {
         public bool Running = true;
-        ConsoleRenderSystem Renderer;
+        public ConsoleRenderSystem Renderer
+        {
+            get;
+            private set;
+        }
+        public PlayerEntity Player
+        {
+            get;
+            private set;
+        }
 
         Queue<InputKeyEvent> KeyEvents = new Queue<InputKeyEvent>();
         object KeyEventsLock = false;
@@ -23,7 +32,6 @@ namespace TextRPG.Game
         private TextWriter ConsoleOut;
         private SystemConsole Console;
         private Stack<View> Views = new Stack<View>();
-        private PlayerEntity Player;
         private World World;
         private View CurrentView
         {
@@ -60,14 +68,25 @@ namespace TextRPG.Game
         {
             CreateNewGame(player);
             SetView(new ViewGame(this, Renderer));
-            PushView(new ViewMessageInfo(this, Renderer, "You wake up", () => {}));
+            PushView(new ViewMessageInfo(this, Renderer, "You wake up", () => 
+            {
+                var city = World.Cities.Random();
+                TravelTo(city);
+            }));
+        }
+
+        public void TravelTo(Location location)
+        {
+            Player.Location = location;
+            SetView(new ViewLocation(this, Renderer, Player, location));
         }
 
         private void CreateNewGame(PlayerEntity player)
         {
             Player = player;
             var generator = new WorldGenerator();
-            World = generator.Generate(player);
+            var desc = WorldDescription.FromFile("world.json");
+            World = generator.Generate(desc, player);
 
         }
 
