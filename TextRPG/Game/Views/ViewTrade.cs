@@ -67,7 +67,7 @@ namespace TextRPG.Game.Views
             if(count == -1 || count == 1)
                 fmt = "{0} - {2} gold";
             else
-                fmt = "{1} - {2} gold ({3} left)";
+                fmt = "{0} - {2} gold ({3} left)";
             return string.Format(fmt, item.Name, item.PluralName, item.Cost, count);
         }
 
