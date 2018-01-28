@@ -13,7 +13,7 @@ namespace TextRPG.Game.Views
         private Label Header;
         private GUITextInput Name;
         private GUIButton Continue;
-        private const int MaxNameLength = 32;
+        private const int MaxNameLength = 16;
 
         public ViewNameCharacter(GameSystem game, RenderSystem renderer) : base(game, renderer)
         {

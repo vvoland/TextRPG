@@ -31,6 +31,7 @@ namespace TextRPG.Game
         Thread InputThread;
         private TextWriter ConsoleOut;
         private SystemConsole Console;
+        private View PlayerView;
         private Stack<View> Views = new Stack<View>();
         private World World;
         private View CurrentView
@@ -87,7 +88,7 @@ namespace TextRPG.Game
             var generator = new WorldGenerator();
             var desc = WorldDescription.FromFile("world.json");
             World = generator.Generate(desc, player);
-
+            PlayerView = new ViewCharacter(this, Renderer, Player);
         }
 
         public void PushView(View view)
@@ -148,6 +149,7 @@ namespace TextRPG.Game
 
                 float dt = CalculateDeltaTime(ref lastTicks);
                 CurrentView?.Update(dt);
+                PlayerView?.Update(dt);
 
                 System.Console.SetOut(ConsoleOut);
                 Renderer.Flush();

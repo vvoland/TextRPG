@@ -9,7 +9,11 @@ namespace TextRPG.Game
         public Inventory Inventory { get; set; }
         public HumanEquipment Equipment;
 
-        private HealthDamageable Damageable;
+        public HealthDamageable Damageable
+        {
+            get;
+            private set;
+        }
 
         public bool IsAlive => Damageable.IsAlive;
 

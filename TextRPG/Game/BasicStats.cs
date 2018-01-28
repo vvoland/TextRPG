@@ -9,6 +9,7 @@ namespace TextRPG.Game
         public int Agility { get; set; }
         public int Intelligence { get; set; }
         public int Charisma { get; set; }
+        public int BaseHealth = 10;
 
         public BasicStats()
         {
@@ -27,7 +28,7 @@ namespace TextRPG.Game
 
         public int CalculateHealth()
         {
-            return Level * Strength;
+            return BaseHealth + Level * Strength;
         }
     }
 }
