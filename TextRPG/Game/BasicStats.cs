@@ -7,13 +7,12 @@ namespace TextRPG.Game
         public int Level { get; set; }
         public int Strength { get; set; }
         public int Agility { get; set; }
-        public int Intelligence { get; set; }
         public int Charisma { get; set; }
         public int BaseHealth = 10;
 
         public BasicStats()
         {
-            Level = Strength = Agility = Intelligence = Charisma = 1;
+            Level = Strength = Agility = Charisma = 1;
         }
 
         public BasicStats Clone()

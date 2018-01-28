@@ -3,19 +3,20 @@ using TextRPG.Event;
 using TextRPG.GUI;
 using TextRPG.GUI.Layout;
 using TextRPG.Render;
+using TextRPG.Utils;
 
 namespace TextRPG.Game.Views
 {
     public class ViewCharacter : View
     {
-        private HumanEntity Entity;
+        private PlayerEntity Entity;
         private Frame Frame;
         private LinearLayout Layout;
-        private Label Header, CharacterName, Health, Gold, Stats;
+        private Label Header, CharacterName, Health, Gold, Stats, Exp;
         private Vector2 Size;
         private float Timer = 0.0f;
 
-        public ViewCharacter(GameSystem game, RenderSystem renderer, HumanEntity entity) : base(game, renderer)
+        public ViewCharacter(GameSystem game, RenderSystem renderer, PlayerEntity entity) : base(game, renderer)
         {
             int size = (int)(MathF.Min(Renderer.Size.X, Renderer.Size.Y) * 0.25f);
             if(size < 21)
@@ -50,6 +51,10 @@ namespace TextRPG.Game.Views
             Gold.Color = Color.DarkYellow;
             Layout.Add(new GUIAdapter(Gold));
 
+            Exp = new Label("");
+            Exp.Color = Color.DarkCyan;
+            Layout.Add(new GUIAdapter(Exp));
+
             Stats = new Label("");
             Layout.Add(new GUIAdapter(Stats));
 
@@ -78,12 +83,18 @@ namespace TextRPG.Game.Views
                 Health.Color = Color.DarkGreen;
 
             Gold.Text = string.Format("Gold: {0}", Entity.Inventory.Gold);
-            Stats.Text = string.Format("\nLevel: {0}\nStrength: {1}\nAgility: {2}\nIntelligence: {3}\nCharisma: {4}",
-                Entity.Stats.Level, Entity.Stats.Strength, Entity.Stats.Agility, Entity.Stats.Intelligence, Entity.Stats.Charisma);
+            Stats.Text = string.Format("\nLevel: {0}\nStrength: {1}\nAgility: {2}\nCharisma: {3}",
+                Entity.Stats.Level, Entity.Stats.Strength, Entity.Stats.Agility, Entity.Stats.Charisma);
+            Exp.Text = string.Format("EXP: {0}/{1}", Entity.Experience.Points, Entity.Experience.NextLevel);
         }
 
         public override bool OnEvent(InputKeyEvent ev)
         {
+            if(ev.KeyChar == 'l')
+            {
+                Entity.Experience.Add(100);
+                return true;
+            }
             return false;
         }
 

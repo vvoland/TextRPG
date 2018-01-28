@@ -10,37 +10,24 @@ namespace TextRPG.Game
             {
                 Level = 1,
 
-                Agility = 4,
                 Strength = 8,
-                Charisma = 3,
-                Intelligence = 3,
-            });
-        public static readonly Profession Mage = new Profession("Mage",
-            new BasicStats
-            {
-                Level = 1,
-
                 Agility = 4,
-                Strength = 3,
-                Charisma = 5,
-                Intelligence = 8,
-            });
+                Charisma = 3,
+            }, 1, 0, 1);
         public static readonly Profession Rogue = new Profession("Rogue",
             new BasicStats
             {
                 Level = 1,
-
-                Agility = 8,
+                
                 Strength = 3,
+                Agility = 8,
                 Charisma = 5,
-                Intelligence = 4,
-            });
+            }, 0, 1, 1);
 
 
         public static readonly List<Profession> All = new List<Profession>
         {
             Warrior,
-            Mage,
             Rogue
         };
 

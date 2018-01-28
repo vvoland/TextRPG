@@ -2,6 +2,7 @@ namespace TextRPG.Game
 {
     public class PlayerEntity : HumanEntity
     {
+        public Experience Experience;
         public Location Location { get; set; }
         public Profession Profession
         {
@@ -14,6 +15,7 @@ namespace TextRPG.Game
             Name = name;
             Profession = profession;
             Stats = Profession.BaseStats.Clone();
+            Experience = new Experience(Stats, Profession);
             Inventory.Gold = 100;
         }
     }

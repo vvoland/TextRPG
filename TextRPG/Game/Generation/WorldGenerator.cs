@@ -73,14 +73,13 @@ namespace TextRPG.Game.Generation
             };
         }
 
-        private CreatureEntity CreateCreature(string name, int level, int strength, int agility, int intelligence = 1, int charisma = 1)
+        private CreatureEntity CreateCreature(string name, int level, int strength, int agility, int charisma = 1)
         {
             var stats = new BasicStats
             {
                 Level = level,
                 Strength = strength,
                 Agility = agility,
-                Intelligence = intelligence,
                 Charisma = charisma
             };
 

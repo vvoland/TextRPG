@@ -170,7 +170,10 @@ namespace TextRPG.Game
             {
                 while (KeyEvents.Count > 0)
                 {
-                    CurrentView.OnEvent(KeyEvents.Dequeue());
+                    var even = KeyEvents.Dequeue();
+                    if(PlayerView != null && PlayerView.OnEvent(even))
+                        continue;
+                    CurrentView.OnEvent(even);
                 }
             }
         }
