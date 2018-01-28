@@ -123,7 +123,7 @@ namespace TextRPG.Game.Generation
             foreach(var healingItem in Items.OfType<ItemHealthy>())
                 vendor.AddUnlimited(healingItem);
             var weapons = Items.OfType<ItemWeapon>();
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 2; i++)
             {
                 var weapon = weapons.ElementAt(Random.Next(weapons.Count()));
                 vendor.Add(weapon);
