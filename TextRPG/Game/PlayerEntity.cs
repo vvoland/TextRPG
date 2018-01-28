@@ -2,6 +2,7 @@ namespace TextRPG.Game
 {
     public class PlayerEntity : HumanEntity
     {
+        public Location Location { get; set; }
         public Profession Profession
         {
             get;
@@ -12,6 +13,7 @@ namespace TextRPG.Game
         {
             Name = name;
             Profession = profession;
+            Inventory.Gold = 100;
         }
     }
 }
