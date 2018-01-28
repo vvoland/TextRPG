@@ -50,7 +50,7 @@ namespace TextRPG.Game.Views
             string fmt;
             if(Vendor.Buy(item, Game.Player.Inventory))
             {
-                fmt = "You bought {0} for {1}!";
+                fmt = "You bought {0} for {1} gold!";
             }
             else
             {
@@ -67,7 +67,7 @@ namespace TextRPG.Game.Views
             if(count == -1 || count == 1)
                 fmt = "{0} - {2} gold";
             else
-                fmt = "{1} - {3} gold ({4} left)";
+                fmt = "{1} - {2} gold ({3} left)";
             return string.Format(fmt, item.Name, item.PluralName, item.Cost, count);
         }
 
