@@ -4,6 +4,14 @@ namespace TextRPG.Game
 {
     public class Location : INameable
     {
+        public virtual string DisplayName
+        {
+            get
+            {
+                return Name;
+            }
+        }
+
         public string Name { get; set; }
         public string PluralName
         {
@@ -19,6 +27,15 @@ namespace TextRPG.Game
             }
         }
 
+        public ICollection<IInteractable> Interactables
+        {
+            get
+            {
+                return _Interactables;
+            }
+        }
+        private List<IInteractable> _Interactables = new List<IInteractable>();
+
         private List<Location> _Links;
         private List<Entity> Entities = new List<Entity>();
 
@@ -26,6 +43,12 @@ namespace TextRPG.Game
         {
             _Links = new List<Location>();
             Name = name;
+        }
+
+        public Location Add(IInteractable interactable)
+        {
+            _Interactables.Add(interactable);
+            return this;
         }
 
         public void Link(Location other)
