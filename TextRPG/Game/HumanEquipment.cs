@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TextRPG.Game.Mechanics;
 
 namespace TextRPG.Game
@@ -7,8 +8,19 @@ namespace TextRPG.Game
     {
         public ItemWeapon Weapon
         {
-            get;
-            protected set;
+            get
+            {
+                // Lazy way: use the best weapon because
+                // there is no inventory GUI
+                // TODO: Implement inventory GUI and equipping
+                return Inventory
+                    .OfType<ItemWeapon>()
+                    .OrderByDescending(w => w.Strength * w.Speed)
+                    .FirstOrDefault();
+            }
+            private set
+            {
+            }
         }
 
         private IInventory Inventory;

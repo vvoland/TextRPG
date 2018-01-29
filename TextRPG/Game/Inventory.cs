@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TextRPG.Game
 {
-    public class Inventory : IInventory, ICollection, IEnumerable<Item>
+    public class Inventory : IInventory, ICollection
     {
         public int Size 
         {

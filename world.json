@@ -8,6 +8,8 @@
 
     "people.names": [
         "Bogdan", "Stanisław", "Józef", "Maciek"
-    ]
+    ],
+
+    "travel.fight_chance": 40
 
 }

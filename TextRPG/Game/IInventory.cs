@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 namespace TextRPG.Game
 {
-    public interface IInventory
+    public interface IInventory : IEnumerable<Item>
     {
         int Gold { get; set; }
         int Size { get; }

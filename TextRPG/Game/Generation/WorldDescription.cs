@@ -22,6 +22,9 @@ namespace TextRPG.Game.Generation
         [JsonProperty("people.names")]
         public List<string> PeopleNames { get; set; }
 
+        [JsonProperty("travel.fight_chance")]
+        public int TravelFightChance { get; set; }
+
         public static WorldDescription FromFile(string file)
         {
             var data = File.ReadAllText(file);

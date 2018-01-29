@@ -47,6 +47,11 @@ namespace TextRPG.Game.Test
                 return Params.CanUseItemWeapon;
             }
 
+            public bool CanUse(ItemHealthy healthy)
+            {
+                throw new NotImplementedException();
+            }
+
             public void Use(Item item)
             {
                 throw new System.NotImplementedException();
@@ -57,6 +62,10 @@ namespace TextRPG.Game.Test
                 throw new System.NotImplementedException();
             }
 
+            public void Use(ItemHealthy healthy)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         [OneTimeSetUp]

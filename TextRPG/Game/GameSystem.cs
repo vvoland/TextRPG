@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using TextRPG.Event;
 using TextRPG.Game.Generation;
@@ -34,6 +35,7 @@ namespace TextRPG.Game
         private View PlayerView;
         private Stack<View> Views = new Stack<View>();
         private World World;
+        private Random Random = new Random();
         private View CurrentView
         {
             get
@@ -72,14 +74,36 @@ namespace TextRPG.Game
             PushView(new ViewMessageInfo(this, Renderer, "You wake up", () => 
             {
                 var city = World.Cities.Random();
-                TravelTo(city);
+                TravelTo(city, false);
             }));
         }
 
-        public void TravelTo(Location location)
+        public void End()
         {
-            Player.Location = location;
-            SetView(new ViewLocation(this, Renderer, Player, location));
+            Running = false;
+        }
+
+        public void TravelTo(Location location, bool allowFight = true)
+        {
+            int travelFightRoll = Random.Next(100);
+            Logger.Log("Travel fight roll: {0}", travelFightRoll);
+            if(allowFight && travelFightRoll < World.Description.TravelFightChance)
+            {
+                var opponent = World.Creatures
+                    .OrderBy(c => Math.Abs(c.Stats.Level - Player.Stats.Level))
+                    .Take(3)
+                    .ToList()
+                    .Random()
+                    .Clone();
+                CombatActor combatOpponent = new CombatActor(opponent, opponent.Stats, opponent, opponent);
+                Combat combat = new Combat(Player, new []{ combatOpponent });
+                SetView(new ViewCombat(this, Renderer, combat, () => TravelTo(location, false)));
+            }
+            else
+            {
+                Player.Location = location;
+                SetView(new ViewLocation(this, Renderer, Player, location));
+            }
         }
 
         private void CreateNewGame(PlayerEntity player)
