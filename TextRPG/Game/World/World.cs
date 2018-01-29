@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TextRPG.Game.Generation;
 
 namespace TextRPG.Game
 {
@@ -7,12 +8,14 @@ namespace TextRPG.Game
         public List<Item> Items;
         public List<City> Cities;
         public List<CreatureEntity> Creatures;
+        public WorldDescription Description { get; }
 
         private List<Entity> Entities { get; set; }
         private List<Location> Locations { get; set; }
 
-        public World()
+        public World(WorldDescription description)
         {
+            Description = description;
             Entities = new List<Entity>();
             Locations = new List<Location>();
         }

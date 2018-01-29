@@ -16,7 +16,7 @@ namespace TextRPG.Game.Generation
         public World Generate(WorldDescription desc, PlayerEntity player)
         {
             Description = desc;
-            World = new World();
+            World = new World(desc);
             World.Add(player);
 
             GenerateItems();
