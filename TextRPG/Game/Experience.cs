@@ -8,9 +8,11 @@ namespace TextRPG.Game
         public int NextLevel { get; private set; }
         private BasicStats Stats;
         private Profession Profession;
+        private HealthDamageable Health;
 
-        public Experience(BasicStats stats, Profession profession)
+        public Experience(BasicStats stats, HealthDamageable health, Profession profession)
         {
+            Health = health;
             Stats = stats;
             Points = 0;
             NextLevel = 100;
@@ -39,6 +41,7 @@ namespace TextRPG.Game
             Stats.Strength += Profession.StrengthLevelBonus;
             Stats.Agility += Profession.AgilityLevelBonus;
             Stats.Charisma += Profession.CharismaLevelBonus;
+            Health.Heal(Health.MaxHealth);
         }
     }
 }
