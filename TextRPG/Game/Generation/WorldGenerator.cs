@@ -135,7 +135,7 @@ namespace TextRPG.Game.Generation
         {
             foreach (var city in Cities)
             {
-                int desiredLinks = Random.Next(Description.CitiesMaxLinks - 1) + 1;
+                int desiredLinks = Random.Next(Description.CitiesMaxLinks) + 1;
 
                 for (int i = city.Links.Count; i < desiredLinks; i++)
                 {
