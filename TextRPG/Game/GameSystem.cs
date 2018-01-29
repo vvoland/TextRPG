@@ -89,21 +89,43 @@ namespace TextRPG.Game
             Logger.Log("Travel fight roll: {0}", travelFightRoll);
             if(allowFight && travelFightRoll < World.Description.TravelFightChance)
             {
-                var opponent = World.Creatures
-                    .OrderBy(c => Math.Abs(c.Stats.Level - Player.Stats.Level))
-                    .Take(3)
-                    .ToList()
-                    .Random()
-                    .Clone();
-                CombatActor combatOpponent = new CombatActor(opponent, opponent.Stats, opponent, opponent);
-                Combat combat = new Combat(Player, new []{ combatOpponent });
-                SetView(new ViewCombat(this, Renderer, combat, () => TravelTo(location, false)));
+                SetView(new ViewMessageInfo(this, Renderer, "You encounter a hostile creature!", () => TravelFight(location)));
             }
             else
             {
                 Player.Location = location;
                 SetView(new ViewLocation(this, Renderer, Player, location));
             }
+        }
+
+        private void TravelFight(Location location)
+        {
+            var opponent = World.Creatures
+                .OrderBy(c => Math.Abs(c.Stats.Level - Player.Stats.Level))
+                .Take(3)
+                .ToList()
+                .Random()
+                .Clone();
+
+            CombatActor combatOpponent = new CombatActor(opponent, opponent.Stats, opponent, opponent);
+            Combat combat = new Combat(Player, new[] { combatOpponent });
+            SetView(new ViewCombat(this, Renderer, combat, () =>
+            {
+                TravelTo(location, false);
+                if (combat.EnemiesDead)
+                {
+                    var calculator = new ExperienceCalculatorVisitor();
+                    int exp = combat.Enemies
+                        .Select(e => calculator.Visit(e.Stats))
+                        .Cast<ExperienceCalculatorVisitorResult>()
+                        .Select(r => r.Experience)
+                        .Sum();
+
+                    Player.Experience.Add(exp);
+                    string msg = string.Format("You killed all enemies! You gain {0} experience points", exp);
+                    PushView(new ViewMessageInfo(this, Renderer, msg, () => { }));
+                }
+            }));
         }
 
         private void CreateNewGame(PlayerEntity player)
