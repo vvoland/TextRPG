@@ -46,7 +46,7 @@ namespace TextRPG.Game.Views
             Log.Pivot = new Vector2f(0.5f, 1.0f);
 
             Actions = new LinearLayout(LayoutDirection.Horizontal, GetScreenPoint(0.5f, 0.25f), Vector2f.Center);
-            NextTurn = new GUIButton(Vector2.Zero, "Next Turn", () => DoAttack());
+            NextTurn = new GUIButton(Vector2.Zero, "Next Turn", () => Tick());
             Retreat = new GUIButton(Vector2.Zero, "Retreat", () => DoRetreat());
             Quit = new GUIButton(Vector2.Zero, "Close", () => DoClose());
             Actions.Add(NextTurn);
@@ -74,7 +74,7 @@ namespace TextRPG.Game.Views
             Description.Text = string.Format("You are in combat\nEnemies:\n{0}", BuildEnemiesText());
         }
 
-        private void DoAttack()
+        private void Tick()
         {
             ++Turn;
             Combat.Tick();
@@ -93,6 +93,7 @@ namespace TextRPG.Game.Views
         private void DoRetreat()
         {
             Combat.PlayerActor.AttemptRetreat = true;
+            Tick();
         }
 
         private void OnCombatAction(CombatAction action)

@@ -95,6 +95,7 @@ namespace TextRPG.Game.Mechanics
             {
                 if(actor.AttemptRetreat)
                 {
+                    actor.AttemptRetreat = false;
                     if(AttemptRetreat(actor))
                         break;
                 }
