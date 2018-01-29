@@ -114,18 +114,30 @@ namespace TextRPG.Game
                 TravelTo(location, false);
                 if (combat.EnemiesDead)
                 {
-                    var calculator = new ExperienceCalculatorVisitor();
-                    int exp = combat.Enemies
-                        .Select(e => calculator.Visit(e.Stats))
-                        .Cast<ExperienceCalculatorVisitorResult>()
-                        .Select(r => r.Experience)
-                        .Sum();
-
-                    Player.Experience.Add(exp);
-                    string msg = string.Format("You killed all enemies! You gain {0} experience points", exp);
-                    PushView(new ViewMessageInfo(this, Renderer, msg, () => { }));
+                    RewardPlayerForCombat(combat);
                 }
             }));
+        }
+
+        private void RewardPlayerForCombat(Combat combat)
+        {
+            var expCalculator = new ExperienceCalculatorVisitor();
+            var rewardCalculator = new CombatRewardCalculatorVisitor();
+            int exp = combat.Enemies
+                .Select(e => expCalculator.Visit(e.Stats))
+                .Cast<ExperienceCalculatorVisitorResult>()
+                .Select(r => r.Experience)
+                .Sum();
+            int gold = combat.Enemies
+                .Select(e => rewardCalculator.Visit(e.Stats))
+                .Cast<CombatRewardCalculatorVisitorResult>()
+                .Select(r => r.Gold)
+                .Sum();
+
+            Player.Experience.Add(exp);
+            Player.Inventory.Gold += gold;
+            string msg = string.Format("You killed all enemies! You gain {0} experience points and {1} gold!", exp, gold);
+            PushView(new ViewMessageInfo(this, Renderer, msg, () => { }));
         }
 
         private void CreateNewGame(PlayerEntity player)
