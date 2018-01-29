@@ -78,6 +78,8 @@ namespace TextRPG.Render
 
         public override void Render(Label label)
         {
+            if(string.IsNullOrEmpty(label.Text))
+                return;
             var lines = label.RenderLines;
             int maxLineSize = lines
                 .Select(s => s.Count())
