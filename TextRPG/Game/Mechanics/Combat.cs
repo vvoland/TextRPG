@@ -99,7 +99,7 @@ namespace TextRPG.Game.Mechanics
                     if(AttemptRetreat(actor))
                         break;
                 }
-                else
+                else if(actor.IsAlive)
                 {
                     Attack(actor);
                 }
