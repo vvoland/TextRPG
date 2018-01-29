@@ -27,7 +27,7 @@ namespace TextRPG.Game
 
         public int CalculateHealth()
         {
-            return BaseHealth + Level * Strength;
+            return BaseHealth + Strength * 2 + Level * 5;
         }
     }
 }
