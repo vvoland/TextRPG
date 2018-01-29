@@ -113,6 +113,7 @@ namespace TextRPG.Game.Generation
                 int vendors = Random.Next(Description.CitiesMaxVendors);
                 for(int i = 0; i < vendors; i++)
                     city.Add(CreateCityVendor());
+                city.Add(new Tavern());
             }
         }
 
