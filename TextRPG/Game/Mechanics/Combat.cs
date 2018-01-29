@@ -89,7 +89,7 @@ namespace TextRPG.Game.Mechanics
                 return;
 
             var sortedByInitiative = Actors
-                .OrderByDescending(actor => InitiativeStatsVisitor.Calculate(actor));
+                .OrderByDescending(actor => InitiativeStatsVisitor.Calculate(actor.Stats));
 
             foreach(var actor in sortedByInitiative)
             {
@@ -112,7 +112,7 @@ namespace TextRPG.Game.Mechanics
 
         private bool AttemptRetreat(CombatActor actor)
         {
-            int initiative = InitiativeStatsVisitor.Calculate(actor);
+            int initiative = InitiativeStatsVisitor.Calculate(actor.Stats);
             int chance = 20 + initiative;
             var rng = new Random();
             FinishedByRetreat = rng.Next(100) < chance;
@@ -129,10 +129,10 @@ namespace TextRPG.Game.Mechanics
 
         private void Attack(CombatActor actor)
         {
-            var dmg = actor.Damage();
+            var dmg = actor.DamageDealer.Damage();
             if (actor.Target != null)
             {
-                actor.Target.ReceiveDamage(ref dmg);
+                actor.Target.Damageable.ReceiveDamage(ref dmg);
                 OnAction(new CombatAction
                 {
                     Type = CombatActionType.Attack,
@@ -142,5 +142,6 @@ namespace TextRPG.Game.Mechanics
                 });
             }
         }
+
     }
 }
