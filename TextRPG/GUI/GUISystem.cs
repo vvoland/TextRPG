@@ -36,6 +36,29 @@ namespace TextRPG.GUI
             Widgets.Add(widget);
         }
 
+
+        public void Remove(GUIWidget widget)
+        {
+            ISelectable selectable = widget as ISelectable;
+            IEventListener<InputKeyEvent> keyListener = widget as IEventListener<InputKeyEvent>;
+
+            if(selectable != null)
+            {
+                RemoveSelectable(selectable);
+            }
+            if(keyListener != null)
+            {
+                InputKeyListeners.Remove(keyListener);
+            }
+            Widgets.Remove(widget);
+        }
+
+        private void RemoveSelectable(ISelectable selectable)
+        {
+            Selectables.Remove(selectable);
+            NextSelectable();
+        }
+
         private void AddSelectable(ISelectable selectable)
         {
             Selectables.Add(selectable);
@@ -55,7 +78,10 @@ namespace TextRPG.GUI
         public void NextSelectable()
         {
             if(Selectables.Count == 0)
+            {
+                CurrentSelectable = null;
                 return;
+            }
 
             int idx = Selectables.IndexOf(CurrentSelectable) + 1;
             if(idx >= Selectables.Count)
