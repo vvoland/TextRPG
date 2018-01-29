@@ -15,7 +15,8 @@ namespace TextRPG.Game
             Name = name;
             Profession = profession;
             Stats = Profession.BaseStats.Clone();
-            Experience = new Experience(Stats, Profession);
+            Damageable = new HealthDamageable(Stats);
+            Experience = new Experience(Stats, Damageable, Profession);
             Inventory.Gold = 100;
         }
     }

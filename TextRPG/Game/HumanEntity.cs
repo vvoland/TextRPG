@@ -12,7 +12,7 @@ namespace TextRPG.Game
         public HealthDamageable Damageable
         {
             get;
-            private set;
+            protected set;
         }
 
         public bool IsAlive => Damageable.IsAlive;
