@@ -40,10 +40,10 @@ namespace TextRPG.Game.Generation
 
                 new ItemWeapon("Wooden Stick").SetStrength(1).SetSpeed(1.0f).SetCost(2),
                 new ItemWeapon("Dagger").SetStrength(2).SetSpeed(2.0f).SetCost(10),
-                new ItemWeapon("Staff").SetStrength(5).SetSpeed(0.15f).SetCost(25),
-                new ItemWeapon("Short Sword").SetStrength(3).SetSpeed(1.0f).SetCost(30),
-                new ItemWeapon("Axe").SetStrength(4).SetSpeed(0.9f).SetCost(50),
-                new ItemWeapon("Sword").SetStrength(5).SetSpeed(0.9f).SetCost(70)
+                new ItemWeapon("Staff").SetStrength(6).SetSpeed(0.15f).SetCost(25),
+                new ItemWeapon("Short Sword").SetStrength(4).SetSpeed(1.0f).SetCost(30),
+                new ItemWeapon("Axe").SetStrength(8).SetSpeed(0.9f).SetCost(50),
+                new ItemWeapon("Sword").SetStrength(10).SetSpeed(0.9f).SetCost(70)
             };
         }
 
