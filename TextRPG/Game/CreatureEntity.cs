@@ -44,5 +44,10 @@ namespace TextRPG.Game
         {
             Damageable.ReceiveDamage(ref damage);
         }
+
+        public string DescribeDamageable()
+        {
+            return Damageable.DescribeDamageable();
+        }
     }
 }

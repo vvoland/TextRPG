@@ -37,7 +37,14 @@ namespace TextRPG.Game
 
         public Damage Damage()
         {
-            throw new System.NotImplementedException();
+            var dmg = Equipment.Damage();
+            dmg.Strength += Stats.Strength;
+            return dmg;
+        }
+
+        public string DescribeDamageable()
+        {
+            return Damageable.DescribeDamageable();
         }
     }
 }

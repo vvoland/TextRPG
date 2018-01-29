@@ -5,5 +5,6 @@ namespace TextRPG.Game
         bool IsAlive { get; }
         void Kill();
         void ReceiveDamage(ref Damage damage);
+        string DescribeDamageable();
     }
 }

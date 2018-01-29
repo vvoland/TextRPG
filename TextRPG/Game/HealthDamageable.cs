@@ -39,6 +39,11 @@ namespace TextRPG.Game
             Health -= damage.Strength;
         }
 
+        public string DescribeDamageable()
+        {
+            return string.Format("{0}/{1}", Health, MaxHealth);
+        }
+
         public void Kill()
         {
             Health = 0;

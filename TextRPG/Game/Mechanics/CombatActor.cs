@@ -2,18 +2,23 @@ namespace TextRPG.Game.Mechanics
 {
     public class CombatActor : IStats, IDamageable, IDamageDealer
     {
+        public CombatActor Target;
         public IStats Stats { get; private set; }
-        IDamageable Damageable;
+        public INameable Name { get; private set; }
+        public IDamageable Damageable { get; private set; }
         IDamageDealer DamageDealer;
 
-        public CombatActor(IStats stats, IDamageable damageable, IDamageDealer dealer)
+        public CombatActor(INameable name, IStats stats, IDamageable damageable, IDamageDealer dealer)
         {
+            Name = name;
+            Target = null;
             Stats = stats;
             Damageable = damageable;
             DamageDealer = dealer;
         }
 
         public bool IsAlive => Damageable.IsAlive;
+        public bool AttemptRetreat { get; set; }
 
         public Damage Damage()
         {
@@ -38,6 +43,11 @@ namespace TextRPG.Game.Mechanics
         public int CalculateHealth()
         {
             return Stats.CalculateHealth();
+        }
+
+        public string DescribeDamageable()
+        {
+            return Damageable.DescribeDamageable();
         }
     }
 }
