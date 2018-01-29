@@ -121,5 +121,11 @@ namespace TextRPG.GUI.Layout
             widget.Pivot = Pivot;
             Recalculate();
         }
+
+        public void Remove(GUIWidget widget)
+        {
+            Widgets.Remove(widget);
+            Recalculate();
+        }
     }
 }
