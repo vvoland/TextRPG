@@ -4,7 +4,7 @@
         "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L"
     ],
     "cities.max_links": 4,
-    "cities.max_vendors": 2,
+    "cities.max_vendors": 1,
 
     "people.names": [
         "John", "Mark", "Joseph", "Olaf"
