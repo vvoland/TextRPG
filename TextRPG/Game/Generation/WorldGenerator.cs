@@ -120,8 +120,6 @@ namespace TextRPG.Game.Generation
         private Vendor CreateCityVendor()
         {
             var vendor = new Vendor(Description.PeopleNames.Random());
-            foreach(var healingItem in Items.OfType<ItemHealthy>())
-                vendor.AddUnlimited(healingItem);
             var weapons = Items.OfType<ItemWeapon>();
             for(int i = 0; i < 2; i++)
             {
