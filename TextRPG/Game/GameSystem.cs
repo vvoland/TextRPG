@@ -174,8 +174,6 @@ namespace TextRPG.Game
             Console = new SystemConsole();
 
             Renderer = new ConsoleRenderSystem(Console, Console.WindowWidth, Console.WindowHeight);
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.White;
             Console.Clear();
         }
 
